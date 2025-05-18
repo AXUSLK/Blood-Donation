@@ -31,34 +31,24 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application dashboard for Admin.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function adminIndex()
+    public function adminDashboard()
     {
         // xdebug_break();
-        return view('backend.admin');
-    }
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function tutorIndex()
-    {
-        // xdebug_break();
-        return view('backend.tutor');
+        return view('backend.dashboard.admin');
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application dashboard for Donor.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function StudentIndex()
+    public function donorDashboard()
     {
         // xdebug_break();
-        return view('backend.index');
+        return view('backend.dashboard.donor');
     }
 }

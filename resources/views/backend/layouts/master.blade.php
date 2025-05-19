@@ -9,7 +9,7 @@
     @hasSection('head')
         @yield('head')
     @else
-        <title>Blood Donation LTE</title>
+        <title>Blood Bank LTE</title>
     @endif
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />

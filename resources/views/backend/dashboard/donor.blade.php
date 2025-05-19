@@ -20,6 +20,14 @@
     <!-- Main Dashboard Content -->
     <div class="content">
         <div class="container-fluid">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h5><i class="icon fas fa-check"></i> Success!</h5>
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="row">
                 <!-- Example Card 1 -->
                 <div class="col-lg-3 col-6">

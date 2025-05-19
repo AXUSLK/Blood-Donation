@@ -28,7 +28,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if (Auth::user()->hasRole('Admin')) {
+            return redirect()->intended(route('backend.admin.dashboard', absolute: false));
+        } elseif (Auth::user()->hasRole('Donor')) {
+            return redirect()->intended(route('backend.donor.dashboard', absolute: false));
+        } else {
+            Auth::logout();
+            abort(403, 'Unauthorized');
+        }
     }
 
     /**

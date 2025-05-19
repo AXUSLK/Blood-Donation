@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Lov;
 use App\Models\User;
+use App\Rules\PhoneNumber;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -19,7 +22,11 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $genders = Lov::where('lov_category_id', 1)->get();
+        $titles = Lov::where('lov_category_id', 2)->get();
+        $bloodGroups = Lov::where('lov_category_id', 3)->get();
+        $roles = Role::all();
+        return view('auth.register', compact('genders', 'titles', 'bloodGroups', 'roles'));
     }
 
     /**
@@ -30,21 +37,37 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'title' => 'nullable|string|max:10',
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['required', new PhoneNumber],
+            'blood_group' => 'required|string',
+            'gender' => 'required|string',
+            'dob' => 'required|date',
+            'age' => 'required|integer|min:0',
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'title' => $request->title,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'blood_group' => $request->blood_group,
+            'gender' => $request->gender,
+            'dob' => $request->dob,
+            'age' => $request->age,
         ]);
+        $user->syncRoles([5]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('backend.donor.dashboard', absolute: false))
+            ->with('success', 'Registration successful! Welcome to Blood Bank LTE.');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Recipient;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,8 +18,9 @@ class DatabaseSeeder extends Seeder
             LovCategorySeeder::class,
             LovSeeder::class,
             RoleSeeder::class,
+            PermissionSeeder::class,
             CreateAdminUserSeeder::class,
-            // UserSeeder::class,
+            RecipientSeeder::class
         ]);
     }
 }

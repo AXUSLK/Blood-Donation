@@ -30,9 +30,12 @@ class CreateAdminUserSeeder extends Seeder
             // 'email_verified_at' => '2023-05-21 08:53:14',
         ]);
 
-        $roles = Role::all();
-        foreach ($roles as $role) {
-            $superAdmin->assignRole([$role->id]);
-        }
+        // Get Admin role (id 1) and assign all permissions
+        $adminRole = Role::find(1);
+        $permissions = Permission::pluck('name')->toArray();
+        $adminRole->syncPermissions($permissions);
+
+        // Assign Admin role to user
+        $superAdmin->assignRole($adminRole->name);
     }
 }

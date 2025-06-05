@@ -45,14 +45,18 @@
 
                                 <div class="form-group">
                                     <label>Assign Permissions</label>
-                                    @foreach ($permissions as $permission)
-                                        <div class="form-check">
-                                            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}"
-                                                class="form-check-input"
-                                                {{ is_array(old('permissions')) && in_array($permission->name, old('permissions')) ? 'checked' : '' }}>
-                                            <label class="form-check-label">{{ $permission->name }}</label>
-                                        </div>
-                                    @endforeach
+                                    <div class="row">
+                                        @foreach ($permissions as $index => $permission)
+                                            <div class="col-md-4">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="permissions[]"
+                                                        value="{{ $permission->name }}" class="form-check-input"
+                                                        {{ is_array(old('permissions')) && in_array($permission->name, old('permissions')) ? 'checked' : '' }}>
+                                                    <label class="form-check-label">{{ $permission->name }}</label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
 
                                 <button class="btn btn-success">Create</button>

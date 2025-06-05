@@ -5,10 +5,11 @@ use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\Admin\RecipientController as BackendRecipientController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -26,6 +27,8 @@ Route::prefix('admin')->name('backend.')->group(function () {
         // Admin
         Route::name('admin.')->group(function () {
             Route::get('/dashboard', [BackendDashboardController::class, 'adminDashboard'])->name('dashboard');
+
+            Route::resource('recipients', BackendRecipientController::class);
 
             Route::resource('users', UserController::class);
             Route::resource('roles', RoleController::class);

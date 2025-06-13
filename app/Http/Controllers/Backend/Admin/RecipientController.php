@@ -88,7 +88,7 @@ class RecipientController extends Controller
 
         Recipient::create($validated);
 
-        return redirect()->route('backend.recipients.index')->with('success', 'Recipient added successfully.');
+        return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient added successfully.');
     }
 
     /**

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register | Blood Bank LTE</title>
+    <title>Register | Vital - Blood</title>
 
     <link rel="stylesheet" href="{{ asset('/plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
@@ -44,7 +44,7 @@
                             </ul>
                         </div>
                     @endif
-                    
+
                     <!-- Title -->
                     <div class="form-group mb-3">
                         <select name="title" class="form-control" required>

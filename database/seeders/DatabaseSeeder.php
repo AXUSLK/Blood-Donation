@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             CreateAdminUserSeeder::class,
             RecipientSeeder::class,
-            DonorSeeder::class
+            DonorSeeder::class,
+            BloodInventorySeeder::class
         ]);
     }
 }

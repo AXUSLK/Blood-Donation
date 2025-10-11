@@ -96,6 +96,34 @@
                     </ul>
                 </li>
 
+                {{-- Blood Inventory --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.blood-inventory.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.blood-inventory.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tint"></i>
+                        <p>
+                            Blood Inventory
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-inventory.create') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-inventory.create') ? 'active' : '' }}">
+                                <i class="far fa-plus-square nav-icon"></i>
+                                <p>Add Blood Stock</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-inventory.index') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-inventory.index') ? 'active' : '' }}">
+                                <i class="far fa-list-alt nav-icon"></i>
+                                <p>Manage Inventory</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- Users --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.users.*') ? 'menu-open' : '' }}">
                     <a href="#"

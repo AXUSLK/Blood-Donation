@@ -102,6 +102,33 @@ class LovSeeder extends Seeder
                 'lov_category_id' => '3',
             ],
 
+            // Blood Types
+            [
+                'id' => '21',
+                'name' => 'Whole Blood',
+                'lov_category_id' => '4',
+            ],
+            [
+                'id' => '22',
+                'name' => 'Red Blood Cells',
+                'lov_category_id' => '4',
+            ],
+            [
+                'id' => '23',
+                'name' => 'Platelets',
+                'lov_category_id' => '4',
+            ],
+            [
+                'id' => '24',
+                'name' => 'Plasma',
+                'lov_category_id' => '4',
+            ],
+            [
+                'id' => '25',
+                'name' => 'Cryoprecipitate',
+                'lov_category_id' => '4',
+            ],
+
 
 
 

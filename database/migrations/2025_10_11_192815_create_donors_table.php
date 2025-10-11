@@ -22,8 +22,8 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('city')->nullable();
             $table->string('district')->nullable();
-            $table->string('blood_group')->nullable();
-            $table->string('gender')->nullable();
+            $table->unsignedBigInteger('blood_group')->nullable();
+            $table->unsignedBigInteger('gender')->nullable();
             $table->date('dob')->nullable();
             $table->integer('age')->nullable();
             $table->decimal('weight', 5, 2)->nullable();
@@ -44,6 +44,10 @@ return new class extends Migration
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('blood_group')->references('id')->on('lovs')->onDelete('set null');
+            $table->foreign('gender')->references('id')->on('lovs')->onDelete('set null');
         });
     }
 

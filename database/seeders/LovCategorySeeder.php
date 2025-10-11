@@ -31,9 +31,14 @@ class LovCategorySeeder extends Seeder
                 'name' => 'Blood Group',
                 'remarks' => 'A+, A-, B+, B-, O',
             ],
+            [
+                'id' => '4',
+                'name' => 'Blood Type',
+                'remarks' => 'Whole Blood, Red Blood Cells, Platelets, Plasma, Cryoprecipitate',
+            ],
 
 
-            
+
 
             /****************************************************************************************/
             /** Permission Categories */

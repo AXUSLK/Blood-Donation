@@ -234,3 +234,4 @@ class BloodInventorySeeder extends Seeder
         return $prefix . $year . $month . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 }
+

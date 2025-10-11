@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('blood_inventories', function (Blueprint $table) {
             $table->id();
             $table->string('inventory_id')->unique();
-            $table->unsignedBigInteger('blood_group');
+            $table->unsignedBigInteger('blood_group')->nullable();;
             $table->unsignedBigInteger('blood_type')->nullable();
             $table->decimal('quantity', 10, 2);
             $table->string('unit')->default('units');

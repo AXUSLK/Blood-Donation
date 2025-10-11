@@ -124,6 +124,34 @@
                     </ul>
                 </li>
 
+                {{-- Blood Units --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.blood-units.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.blood-units.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-vial"></i>
+                        <p>
+                            Blood Units
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-units.create') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-units.create') ? 'active' : '' }}">
+                                <i class="far fa-plus-square nav-icon"></i>
+                                <p>Add Blood Unit</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-units.index') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-units.index') ? 'active' : '' }}">
+                                <i class="far fa-list-alt nav-icon"></i>
+                                <p>Manage Units</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- Users --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.users.*') ? 'menu-open' : '' }}">
                     <a href="#"

@@ -9,6 +9,7 @@ class RecipientSeeder extends Seeder
 {
     public function run()
     {
-        Recipient::factory()->count(5)->create();
+        Recipient::factory()->count(10)->create();
     }
 }
+    

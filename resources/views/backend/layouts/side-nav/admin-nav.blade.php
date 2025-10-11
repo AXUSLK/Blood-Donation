@@ -40,11 +40,39 @@
                     </a>
                 </li>
 
+                {{-- Donors --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.donors.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.donors.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-heart"></i>
+                        <p>
+                            Donors
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.donors.create') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.donors.create') ? 'active' : '' }}">
+                                <i class="far fa-plus-square nav-icon"></i>
+                                <p>Register Donor</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.donors.index') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.donors.index') ? 'active' : '' }}">
+                                <i class="far fa-list-alt nav-icon"></i>
+                                <p>Manage Donors</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- Recipients --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.recipients.*') ? 'menu-open' : '' }}">
                     <a href="#"
                         class="nav-link {{ request()->routeIs('backend.admin.recipients.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-lock"></i>
+                        <i class="nav-icon fas fa-user-injured"></i>
                         <p>
                             Recipients
                             <i class="right fas fa-angle-left"></i>

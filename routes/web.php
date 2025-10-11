@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Backend\Admin\RecipientController as BackendRecipientController;
+use App\Http\Controllers\Backend\Admin\DonorController as BackendDonorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,6 +30,7 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::get('/dashboard', [BackendDashboardController::class, 'adminDashboard'])->name('dashboard');
 
             Route::resource('recipients', BackendRecipientController::class);
+            Route::resource('donors', BackendDonorController::class);
 
             Route::resource('users', UserController::class);
             Route::resource('roles', RoleController::class);

@@ -5,13 +5,13 @@
         <div class="container-fluid">
             <div class="row mb-2 align-items-center">
                 <div class="col-sm-6 d-flex justify-content-between align-items-center">
-                    <h1 class="mb-0">Recipient Management</h1>
-                    <a href="{{ route('backend.admin.recipients.create') }}" class="btn btn-sm btn-primary">Add New Recipient</a>
+                    <h1 class="mb-0">Donor Management</h1>
+                    <a href="{{ route('backend.admin.donors.create') }}" class="btn btn-sm btn-primary">Register New Donor</a>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Recipients</li>
+                        <li class="breadcrumb-item active">Donors</li>
                     </ol>
                 </div>
             </div>
@@ -21,7 +21,6 @@
     <section class="content">
         <div class="container-fluid">
 
-            {{-- Success Alert --}}
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="icon fas fa-check"></i>
@@ -36,10 +35,10 @@
             <form method="GET" class="mb-3">
                 <div class="row">
                     <div class="col-md-3">
-                        <input type="text" name="search" class="form-control" placeholder="Search by name, email or patient code"
+                        <input type="text" name="search" class="form-control" placeholder="Search by name, email, or donor ID"
                             value="{{ request('search') }}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <select name="blood_group" class="form-control">
                             <option value="">All Blood Groups</option>
                             @foreach ($bloodGroups as $bloodGroup)
@@ -49,7 +48,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <select name="gender" class="form-control">
                             <option value="">All Genders</option>
                             @foreach ($genders as $gender)
@@ -59,82 +58,75 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <select name="status" class="form-control">
-                            <option value="">All Statuses</option>
-                            @foreach ($statuses as $status)
-                                <option value="{{ $status }}"
-                                    {{ request('status') == $status ? 'selected' : '' }}>
-                                    {{ ucfirst($status) }}</option>
-                            @endforeach
+                    <div class="col-md-2">
+                        <select name="eligibility" class="form-control">
+                            <option value="">All Status</option>
+                            <option value="1" {{ request('eligibility') == '1' ? 'selected' : '' }}>Eligible</option>
+                            <option value="0" {{ request('eligibility') == '0' ? 'selected' : '' }}>Ineligible</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="mt-2 d-flex justify-content-between">
-                    <button class="btn btn-sm btn-secondary">Apply Filters</button>
-                    <a href="{{ route('backend.admin.recipients.index') }}" class="btn btn-sm btn-outline-danger">Reset</a>
+                    <div class="col-md-3">
+                        <button class="btn btn-sm btn-secondary">Apply Filters</button>
+                        <a href="{{ route('backend.admin.donors.index') }}" class="btn btn-sm btn-outline-danger">Reset</a>
+                    </div>
                 </div>
             </form>
 
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title mb-0">Recipient List</h3>
+                    <h3 class="card-title mb-0">Donor List</h3>
                 </div>
 
                 <div class="card-body p-0">
                     <table class="table table-bordered mb-0">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Patient Code</th>
-                                <th>Name</th>
+                                <th>Donor ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
                                 <th>Blood Group</th>
+                                <th>Age</th>
                                 <th>Gender</th>
-                                <th>Contact</th>
+                                <th>Total Donations</th>
                                 <th>Status</th>
-                                <th>Created At</th>
-                                <th width="150">Actions</th>
+                                <th width="180">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($recipients as $recipient)
+                            @forelse ($donors as $donor)
                                 <tr>
-                                    <td>{{ $recipient->id }}</td>
-                                    <td>{{ $recipient->patient_code }}</td>
-                                    <td>{{ $recipient->name }}</td>
+                                    <td>{{ $donor->donor_id }}</td>
+                                    <td>{{ $donor->full_name }}</td>
+                                    <td>{{ $donor->email }}</td>
+                                    <td>{{ $donor->phone }}</td>
+                                    <td>{{ $donor->userBloodGroup?->name ?? '-' }}</td>
+                                    <td>{{ $donor->age }}</td>
+                                    <td>{{ $donor->userGender?->name ?? '-' }}</td>
+                                    <td>{{ $donor->total_donations }}</td>
                                     <td>
-                                        {{ $recipient->userBloodGroup?->name ?? '-' }}
+                                        @if($donor->is_eligible)
+                                            <span class="badge badge-success">Eligible</span>
+                                        @else
+                                            <span class="badge badge-danger">Ineligible</span>
+                                        @endif
                                     </td>
                                     <td>
-                                        {{ $recipient->userGender?->name ?? '-' }}
-                                    </td>
-                                    <td>{{ $recipient->contact_number }}</td>
-                                    <td>
-                                        <span class="badge
-                                            @if($recipient->request_status=='pending') badge-warning
-                                            @elseif($recipient->request_status=='accepted') badge-info
-                                            @elseif($recipient->request_status=='fulfilled') badge-success
-                                            @elseif($recipient->request_status=='rejected') badge-danger
-                                            @endif">
-                                            {{ ucfirst($recipient->request_status) }}
-                                        </span>
-                                    </td>
-                                    <td>{{ $recipient->created_at->format('Y-m-d') }}</td>
-                                    <td>
-                                        <a href="{{ route('backend.admin.recipients.edit', $recipient->id) }}"
-                                            class="btn btn-sm btn-info">Edit</a>
-                                        <form action="{{ route('backend.admin.recipients.destroy', $recipient->id) }}" method="POST"
+                                        <a href="{{ route('backend.admin.donors.show', $donor->id) }}"
+                                            class="btn btn-sm btn-info">View</a>
+                                        <a href="{{ route('backend.admin.donors.edit', $donor->id) }}"
+                                            class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ route('backend.admin.donors.destroy', $donor->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf @method('DELETE')
                                             <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Delete recipient?')">Delete</button>
+                                                onclick="return confirm('Delete donor?')">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="text-center">No recipients found.</td>
+                                    <td colspan="10" class="text-center">No donors found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -142,15 +134,15 @@
                 </div>
 
                 {{-- Pagination --}}
-                @if ($recipients->hasPages())
+                @if ($donors->hasPages())
                     <div class="card-footer clearfix">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                Showing {{ $recipients->firstItem() }} to {{ $recipients->lastItem() }} of {{ $recipients->total() }}
+                                Showing {{ $donors->firstItem() }} to {{ $donors->lastItem() }} of {{ $donors->total() }}
                                 results
                             </div>
                             <div>
-                                {{ $recipients->withQueryString()->onEachSide(1)->links('pagination::bootstrap-4') }}
+                                {{ $donors->withQueryString()->onEachSide(1)->links('pagination::bootstrap-4') }}
                             </div>
                         </div>
                     </div>

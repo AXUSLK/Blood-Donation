@@ -41,7 +41,6 @@ class RecipientController extends Controller
             ->orderByDesc('created_at')
             ->paginate(10);
 
-        // Assuming category 1 = gender, category 3 = blood group in LOV
         $genders = Lov::where('lov_category_id', 1)->get();
         $bloodGroups = Lov::where('lov_category_id', 3)->get();
         $statuses = ['pending', 'accepted', 'fulfilled', 'rejected'];
@@ -88,7 +87,7 @@ class RecipientController extends Controller
 
         Recipient::create($validated);
 
-        return redirect()->route('backend.recipients.index')->with('success', 'Recipient added successfully.');
+        return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient added successfully.');
     }
 
     /**

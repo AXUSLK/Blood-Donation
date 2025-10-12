@@ -110,13 +110,13 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('backend.admin.blood-units.show', $bloodUnit->id) }}"
-                                            class="btn btn-sm btn-info">View</a>
+                                            class="btn btn-xs btn-info">View</a>
                                         <a href="{{ route('backend.admin.blood-units.edit', $bloodUnit->id) }}"
-                                            class="btn btn-sm btn-warning">Edit</a>
+                                            class="btn btn-xs btn-warning">Edit</a>
                                         <form action="{{ route('backend.admin.blood-units.destroy', $bloodUnit->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"
+                                            <button class="btn btn-xs btn-danger"
                                                 onclick="return confirm('Delete blood unit?')">Delete</button>
                                         </form>
                                     </td>

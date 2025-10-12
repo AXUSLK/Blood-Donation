@@ -132,7 +132,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="target_donors">Target Donors <span class="text-danger">*</span></label>
                                             <input type="number" name="target_donors" id="target_donors"
@@ -145,7 +145,20 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="actual_donors">Actual Donors <span class="text-danger">*</span></label>
+                                            <input type="number" name="actual_donors" id="actual_donors"
+                                                   class="form-control @error('actual_donors') is-invalid @enderror"
+                                                   value="{{ old('actual_donors', $bloodCollectionCamp->actual_donors) }}" max="10000">
+                                            @error('actual_donors')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="organizer_name">Organizer Name <span class="text-danger">*</span></label>
                                             <input type="text" name="organizer_name" id="organizer_name"
@@ -158,7 +171,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="organizer_contact">Organizer Contact <span class="text-danger">*</span></label>
                                             <input type="text" name="organizer_contact" id="organizer_contact"

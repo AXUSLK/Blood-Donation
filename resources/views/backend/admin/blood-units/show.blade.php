@@ -3,6 +3,16 @@
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="icon fas fa-check"></i>
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Blood Unit Details</h1>
@@ -45,13 +55,13 @@
                                         </tr>
                                         <tr>
                                             <th>Donor:</th>
-                                            <td>{{ $bloodUnit->donor->name }}</td>
+                                            <td>{{ $bloodUnit->donor?->full_name }}</td>
                                         </tr>
                                         <tr>
                                             <th>Blood Group:</th>
                                             <td>
                                                 <span class="badge badge-primary">
-                                                    {{ $bloodUnit->bloodGroup->name ?? 'N/A' }}
+                                                    {{ $bloodUnit->bloodGroup?->name ?? 'N/A' }}
                                                 </span>
                                             </td>
                                         </tr>
@@ -59,7 +69,7 @@
                                             <th>Blood Type:</th>
                                             <td>
                                                 <span class="badge badge-info">
-                                                    {{ $bloodUnit->bloodType->name ?? 'Whole Blood' }}
+                                                    {{ $bloodUnit->bloodType?->name ?? 'Whole Blood' }}
                                                 </span>
                                             </td>
                                         </tr>
@@ -75,11 +85,11 @@
                                     <table class="table table-bordered">
                                         <tr>
                                             <th width="40%">Collection Date:</th>
-                                            <td>{{ $bloodUnit->collection_date->format('F d, Y') }}</td>
+                                            <td>{{ $bloodUnit->collection_date?->format('F d, Y') }}</td>
                                         </tr>
                                         <tr>
                                             <th>Expiry Date:</th>
-                                            <td>{{ $bloodUnit->expiry_date->format('F d, Y') }}</td>
+                                            <td>{{ $bloodUnit->expiry_date?->format('F d, Y') }}</td>
                                         </tr>
                                         <tr>
                                             <th>Storage Location:</th>

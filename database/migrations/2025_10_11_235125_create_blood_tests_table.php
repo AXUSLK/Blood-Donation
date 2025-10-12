@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('hepatitis_c_result')->nullable();
             $table->string('syphilis_result')->nullable();
             $table->string('malaria_result')->nullable();
-            $table->string('blood_group_result')->nullable();
+            $table->string('blood_group')->nullable();
             $table->string('overall_status')->default('pending'); // pending, passed, failed, quarantined
             $table->text('test_notes')->nullable();
             $table->string('lab_reference')->nullable();

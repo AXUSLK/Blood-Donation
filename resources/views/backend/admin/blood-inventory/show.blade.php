@@ -20,6 +20,16 @@
 
     <section class="content">
         <div class="container-fluid">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="icon fas fa-check"></i>
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-primary">
@@ -140,14 +150,14 @@
                                     <h5>Quick Actions:</h5>
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('backend.admin.blood-inventory.edit', $bloodInventory) }}"
-                                           class="btn btn-warning">
+                                           class="btn btn-warning mx-2">
                                             <i class="fas fa-edit"></i> Edit Details
                                         </a>
 
                                         <form action="{{ route('backend.admin.blood-inventory.toggle-status', $bloodInventory) }}"
                                               method="POST" class="d-inline">
                                             @csrf
-                                            <button type="submit" class="btn {{ $bloodInventory->status ? 'btn-secondary' : 'btn-success' }}">
+                                            <button type="submit" class="btn {{ $bloodInventory->status ? 'btn-secondary' : 'btn-success' }} mx-2">
                                                 <i class="fas fa-{{ $bloodInventory->status ? 'pause' : 'play' }}"></i>
                                                 {{ $bloodInventory->status ? 'Deactivate' : 'Activate' }}
                                             </button>
@@ -158,7 +168,7 @@
                                               onsubmit="return confirm('Are you sure you want to delete this inventory item?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">
+                                            <button type="submit" class="btn btn-danger mx-2">
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>
                                         </form>

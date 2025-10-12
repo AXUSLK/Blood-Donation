@@ -47,7 +47,7 @@ class BloodCollectionCampController extends Controller
             ->when($dateFilter === 'ongoing', fn($q) => $q->ongoing())
             ->when($dateFilter === 'completed', fn($q) => $q->completed())
             ->when($dateFilter === 'past', fn($q) => $q->past())
-            ->orderBy('start_date', 'desc')
+            ->latest()
             ->paginate(10);
 
         return view('backend.admin.blood-collection-camps.index', compact('camps'));

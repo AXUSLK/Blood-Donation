@@ -36,11 +36,11 @@
                                     <label for="donor_id">Select Donor</label>
                                     <select class="form-control" id="donor_id" name="donor_id" required>
                                         <option value="">Select a Donor</option>
-                                        @foreach(\App\Models\Donor::all() as $donor)
-                                        <option value="{{ $donor->id }}">
-                                            {{ $donor->first_name }} {{ $donor->last_name }}
-                                            ({{ $donor->userBloodGroup->value ?? 'N/A' }})
-                                        </option>
+                                        @foreach (\App\Models\Donor::all() as $donor)
+                                            <option value="{{ $donor->id }}">
+                                                {{ $donor->first_name }} {{ $donor->last_name }}
+                                                ({{ $donor->userBloodGroup->value ?? 'N/A' }})
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -99,84 +99,77 @@
     </div>
 @endsection
 
-@push('scripts')
-<script>
-    // Debug: Check if page loaded
-    console.log('AI Eligibility page loaded');
+@section('custom-js')
+    <script>
+        $(document).ready(function() {
+            $('#eligibilityForm').on('submit', function(e) {
+                e.preventDefault();
 
-    document.getElementById('eligibilityForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+                const $form = $(this);
+                const formData = new FormData(this);
+                const $submitBtn = $form.find('button[type="submit"]');
+                const originalText = $submitBtn.html();
 
-        console.log('Form submitted!');
-        const formData = new FormData(this);
-        console.log('Form data:', Object.fromEntries(formData));
+                $submitBtn.html('<i class="fas fa-spinner fa-spin mr-1"></i>Analyzing...').prop('disabled',
+                    true);
 
-        // Add loading state
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Analyzing...';
-        submitBtn.disabled = true;
+                $.ajax({
+                        url: '{{ route('backend.admin.ai.eligibility.predict') }}',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .done(function(data) {
+                        if (data.error) {
+                            alert('Error: ' + data.error);
+                        } else {
+                            displayAIResults(data);
+                        }
+                    })
+                    .fail(function(jqXHR) {
+                        const message = jqXHR.responseJSON && jqXHR.responseJSON.message ?
+                            jqXHR.responseJSON.message :
+                            'Network response was not ok';
+                        alert('Error predicting eligibility: ' + message);
+                    })
+                    .always(function() {
+                        $submitBtn.html(originalText).prop('disabled', false);
+                    });
+            });
 
-        fetch('{{ route("backend.admin.ai.eligibility.predict") }}', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            function displayAIResults(data) {
+                $('#aiResults').show();
+
+                const statusClass = data.eligible ? 'success' : 'danger';
+                const statusIcon = data.eligible ? 'check-circle' : 'times-circle';
+
+                $('#aiResultsContent').html(`
+                    <div class="alert alert-${statusClass}">
+                        <h4><i class="fas fa-${statusIcon}"></i> ${data.eligible ? 'ELIGIBLE' : 'NOT ELIGIBLE'}</h4>
+                        <p><strong>AI Confidence:</strong> ${data.confidence}%</p>
+                        ${data.next_donation_date ? `<p><strong>Next Donation Date:</strong> ${data.next_donation_date}</p>` : ''}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>AI Analysis:</h5>
+                            <ul class="list-group">
+                                ${Array.isArray(data.reasons) ? data.reasons.map(reason => `<li class="list-group-item">${reason}</li>`).join('') : ''}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>AI Recommendations:</h5>
+                            <ul class="list-group">
+                                ${Array.isArray(data.recommendations) ? data.recommendations.map(rec => `<li class="list-group-item">${rec}</li>`).join('') : ''}
+                            </ul>
+                        </div>
+                    </div>
+                `);
             }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('AI Response:', data);
-            if (data.error) {
-                alert('Error: ' + data.error);
-            } else {
-                displayAIResults(data);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error predicting eligibility: ' + error.message);
-        })
-        .finally(() => {
-            // Reset button state
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
         });
-    });
-
-    function displayAIResults(data) {
-        document.getElementById('aiResults').style.display = 'block';
-
-        const statusClass = data.eligible ? 'success' : 'danger';
-        const statusIcon = data.eligible ? 'check-circle' : 'times-circle';
-
-        document.getElementById('aiResultsContent').innerHTML = `
-            <div class="alert alert-${statusClass}">
-                <h4><i class="fas fa-${statusIcon}"></i> ${data.eligible ? 'ELIGIBLE' : 'NOT ELIGIBLE'}</h4>
-                <p><strong>AI Confidence:</strong> ${data.confidence}%</p>
-                ${data.next_donation_date ? `<p><strong>Next Donation Date:</strong> ${data.next_donation_date}</p>` : ''}
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>AI Analysis:</h5>
-                    <ul class="list-group">
-                        ${data.reasons.map(reason => `<li class="list-group-item">${reason}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h5>AI Recommendations:</h5>
-                    <ul class="list-group">
-                        ${data.recommendations.map(rec => `<li class="list-group-item">${rec}</li>`).join('')}
-                    </ul>
-                </div>
-            </div>
-        `;
-    }
-</script>
-@endpush
+    </script>
+@endsection

@@ -86,10 +86,10 @@
                             @forelse ($tests as $test)
                                 <tr>
                                     <td>{{ $test->test_id }}</td>
-                                    <td>{{ $test->bloodUnit->unit_id }}</td>
-                                    <td>{{ $test->bloodUnit->donor->name }}</td>
+                                    <td>{{ $test->bloodUnit?->unit_id }}</td>
+                                    <td>{{ $test->bloodUnit?->donor?->full_name }}</td>
                                     <td>{{ $test->test_date->format('M d, Y') }}</td>
-                                    <td>{{ $test->technician->full_name ?? 'Not Assigned' }}</td>
+                                    <td>{{ $test->technician?->full_name ?? 'Not Assigned' }}</td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
                                             @if($test->hiv_result)
@@ -116,14 +116,14 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('backend.admin.blood-tests.show', $test->id) }}"
-                                            class="btn btn-sm btn-info">View</a>
+                                            class="btn btn-xs btn-info">View</a>
                                         <a href="{{ route('backend.admin.blood-tests.edit', $test->id) }}"
-                                            class="btn btn-sm btn-warning">Edit</a>
+                                            class="btn btn-xs btn-warning">Edit</a>
                                         @if($test->overall_status == 'pending')
                                             <form action="{{ route('backend.admin.blood-tests.quarantine', $test->id) }}" method="POST"
                                                 style="display:inline;">
                                                 @csrf
-                                                <button class="btn btn-sm btn-danger"
+                                                <button class="btn btn-xs btn-danger"
                                                     onclick="return confirm('Quarantine this blood unit?')">Quarantine</button>
                                             </form>
                                         @endif

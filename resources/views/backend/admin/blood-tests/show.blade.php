@@ -3,6 +3,16 @@
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="icon fas fa-check"></i>
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Test Details</h1>
@@ -46,14 +56,14 @@
                                         <tr>
                                             <th>Blood Unit:</th>
                                             <td>
-                                                <a href="{{ route('backend.admin.blood-units.show', $bloodTest->bloodUnit->id) }}" class="text-primary">
-                                                    {{ $bloodTest->bloodUnit->unit_id }}
+                                                <a href="{{ route('backend.admin.blood-units.show', $bloodTest->bloodUnit?->id) }}" class="text-primary">
+                                                    {{ $bloodTest->bloodUnit?->unit_id }}
                                                 </a>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Donor:</th>
-                                            <td>{{ $bloodTest->bloodUnit->donor->name }}</td>
+                                            <td>{{ $bloodTest->bloodUnit?->donor?->full_name }}</td>
                                         </tr>
                                         <tr>
                                             <th>Test Date:</th>
@@ -61,7 +71,7 @@
                                         </tr>
                                         <tr>
                                             <th>Technician:</th>
-                                            <td>{{ $bloodTest->technician->full_name ?? 'Not Assigned' }}</td>
+                                            <td>{{ $bloodTest->technician?->full_name ?? 'Not Assigned' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Lab Reference:</th>
@@ -81,20 +91,20 @@
                                         </tr>
                                         <tr>
                                             <th>Created By:</th>
-                                            <td>{{ $bloodTest->createBy->full_name ?? 'Unknown' }}</td>
+                                            <td>{{ $bloodTest->createBy?->full_name ?? 'Unknown' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Created At:</th>
-                                            <td>{{ $bloodTest->created_at->format('F d, Y \a\t g:i A') }}</td>
+                                            <td>{{ $bloodTest->created_at?->format('F d, Y \a\t g:i A') }}</td>
                                         </tr>
                                         @if($bloodTest->updated_by)
                                         <tr>
                                             <th>Last Updated By:</th>
-                                            <td>{{ $bloodTest->updateBy->full_name ?? 'Unknown' }}</td>
+                                            <td>{{ $bloodTest->updateBy?->full_name ?? 'Unknown' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Last Updated:</th>
-                                            <td>{{ $bloodTest->updated_at->format('F d, Y \a\t g:i A') }}</td>
+                                            <td>{{ $bloodTest->updated_at?->format('F d, Y \a\t g:i A') }}</td>
                                         </tr>
                                         @endif
                                     </table>
@@ -167,7 +177,7 @@
                                                 </span>
                                                 <div class="info-box-content">
                                                     <span class="info-box-text">Blood Group</span>
-                                                    <span class="info-box-number">{{ $bloodTest->blood_group_result ?? 'N/A' }}</span>
+                                                    <span class="info-box-number">{{ $bloodTest->blood_group ?? 'N/A' }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -191,7 +201,7 @@
                                     <h5>Quick Actions:</h5>
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('backend.admin.blood-tests.edit', $bloodTest) }}"
-                                           class="btn btn-warning">
+                                           class="btn btn-warning mx-2">
                                             <i class="fas fa-edit"></i> Edit Test
                                         </a>
 
@@ -199,7 +209,7 @@
                                             <form action="{{ route('backend.admin.blood-tests.quarantine', $bloodTest) }}"
                                                   method="POST" class="d-inline">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger"
+                                                <button type="submit" class="btn btn-danger mx-2"
                                                         onclick="return confirm('Quarantine this blood unit? This will mark it as unfit for use.')">
                                                     <i class="fas fa-ban"></i> Quarantine
                                                 </button>
@@ -208,7 +218,7 @@
                                             <form action="{{ route('backend.admin.blood-tests.approve', $bloodTest) }}"
                                                   method="POST" class="d-inline">
                                                 @csrf
-                                                <button type="submit" class="btn btn-success"
+                                                <button type="submit" class="btn btn-success mx-2"
                                                         onclick="return confirm('Approve this blood unit? This will mark it as safe for use.')">
                                                     <i class="fas fa-check"></i> Approve
                                                 </button>

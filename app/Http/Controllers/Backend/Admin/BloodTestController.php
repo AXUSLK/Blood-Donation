@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BloodTest;
 use App\Models\BloodUnit;
+use App\Models\Lov;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\Backend\Admin\BloodTestStoreService;
@@ -62,15 +63,17 @@ class BloodTestController extends Controller
     {
         $bloodUnits = BloodUnit::where('status', true)
             ->where('is_used', false)
-            ->whereDoesntHave('bloodTests')
+            // ->whereDoesntHave('bloodTests')
             ->with('donor')
             ->get();
 
         $technicians = User::whereHas('roles', function($q) {
-            $q->where('name', 'lab_technician');
+            $q->where('name', 'Lab Technician');
         })->get();
 
-        return view('backend.admin.blood-tests.create', compact('bloodUnits', 'technicians'));
+        $bloodGroups = Lov::where('lov_category_id', 3)->get();
+
+        return view('backend.admin.blood-tests.create', compact('bloodUnits', 'technicians', 'bloodGroups'));
     }
 
     /**
@@ -97,10 +100,12 @@ class BloodTestController extends Controller
     public function edit(BloodTest $bloodTest)
     {
         $technicians = User::whereHas('roles', function($q) {
-            $q->where('name', 'lab_technician');
+            $q->where('name', 'Lab Technician');
         })->get();
 
-        return view('backend.admin.blood-tests.edit', compact('bloodTest', 'technicians'));
+        $bloodGroups = Lov::where('lov_category_id', 3)->get();
+
+        return view('backend.admin.blood-tests.edit', compact('bloodTest', 'technicians', 'bloodGroups'));
     }
 
     /**

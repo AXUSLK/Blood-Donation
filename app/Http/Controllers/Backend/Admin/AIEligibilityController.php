@@ -48,7 +48,7 @@ class AIEligibilityController extends Controller
         $eligible = true;
 
         // AI Analysis 1: Age Check
-        $age = Carbon::parse($donor->date_of_birth)->age;
+        $age = Carbon::parse($donor->dob)->age;
         if ($age < 18 || $age > 65) {
             $eligible = false;
             $reasons[] = "Age {$age} is outside acceptable range (18-65)";

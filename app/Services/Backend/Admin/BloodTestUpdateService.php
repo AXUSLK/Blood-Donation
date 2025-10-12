@@ -20,7 +20,7 @@ class BloodTestUpdateService
             'hepatitis_c_result' => $validated['hepatitis_c_result'],
             'syphilis_result' => $validated['syphilis_result'],
             'malaria_result' => $validated['malaria_result'],
-            'blood_group_result' => $validated['blood_group_result'],
+            'blood_group' => $validated['blood_group'],
             'overall_status' => $this->determineOverallStatus($validated),
             'test_notes' => $validated['test_notes'],
             'lab_reference' => $validated['lab_reference'],
@@ -45,7 +45,7 @@ class BloodTestUpdateService
             'hepatitis_c_result' => 'required|in:negative,positive,pending',
             'syphilis_result' => 'required|in:negative,positive,pending',
             'malaria_result' => 'required|in:negative,positive,pending',
-            'blood_group_result' => 'nullable|string|max:10',
+            'blood_group' => 'nullable|string|max:10',
             'test_notes' => 'nullable|string|max:1000',
             'lab_reference' => 'nullable|string|max:100',
         ])->validate();

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             CreateAdminUserSeeder::class,
+            UserSeeder::class,
             RecipientSeeder::class,
             DonorSeeder::class,
             BloodInventorySeeder::class,

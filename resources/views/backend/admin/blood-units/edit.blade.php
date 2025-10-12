@@ -36,13 +36,8 @@
                                         <div class="form-group">
                                             <label for="unit_id">Unit ID <span class="text-danger">*</span></label>
                                             <input type="text" name="unit_id" id="unit_id"
-                                                   class="form-control @error('unit_id') is-invalid @enderror"
-                                                   value="{{ old('unit_id', $bloodUnit->unit_id) }}" required>
-                                            @error('unit_id')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
+                                                   class="form-control" readonly
+                                                   value="{{ old('unit_id', $bloodUnit->unit_id) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">

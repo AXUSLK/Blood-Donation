@@ -123,11 +123,11 @@
                                     <td>{{ $recipient->created_at->format('Y-m-d') }}</td>
                                     <td>
                                         <a href="{{ route('backend.admin.recipients.edit', $recipient->id) }}"
-                                            class="btn btn-sm btn-info">Edit</a>
+                                            class="btn btn-xs btn-info">Edit</a>
                                         <form action="{{ route('backend.admin.recipients.destroy', $recipient->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"
+                                            <button class="btn btn-xs btn-danger"
                                                 onclick="return confirm('Delete recipient?')">Delete</button>
                                         </form>
                                     </td>

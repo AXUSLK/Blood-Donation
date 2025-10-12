@@ -67,8 +67,8 @@ class BloodUnitController extends Controller
      */
     public function create()
     {
-        $bloodGroups = Lov::where('lov_category_id', 1)->get();
-        $bloodTypes = Lov::where('lov_category_id', 2)->get();
+        $bloodGroups = Lov::where('lov_category_id', 3)->get();
+        $bloodTypes = Lov::where('lov_category_id', 4)->get();
         $donors = Donor::where('is_eligible', true)->where('status', true)->get();
 
         return view('backend.admin.blood-units.create', compact('bloodGroups', 'bloodTypes', 'donors'));

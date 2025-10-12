@@ -19,7 +19,7 @@ class BloodTest extends Model
         'hepatitis_c_result',
         'syphilis_result',
         'malaria_result',
-        'blood_group_result',
+        'blood_group',
         'overall_status',
         'test_notes',
         'lab_reference',
@@ -82,12 +82,12 @@ class BloodTest extends Model
         return $this->belongsTo(User::class, 'technician_id');
     }
 
-    public function createdBy()
+    public function createBy()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updatedBy()
+    public function updateBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }

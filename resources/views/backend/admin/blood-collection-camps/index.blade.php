@@ -87,8 +87,8 @@
                                     <td>{{ $camp->camp_id }}</td>
                                     <td>{{ $camp->name }}</td>
                                     <td>{{ $camp->location }}</td>
-                                    <td>{{ $camp->start_date->format('M d, Y') }}</td>
-                                    <td>{{ $camp->end_date->format('M d, Y') }}</td>
+                                    <td>{{ $camp->start_date?->format('M d, Y') }}</td>
+                                    <td>{{ $camp->end_date?->format('M d, Y') }}</td>
                                     <td>
                                         <span class="badge badge-info">{{ $camp->actual_donors }}/{{ $camp->target_donors }}</span>
                                         @if($camp->target_donors > 0)
@@ -102,13 +102,13 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('backend.admin.blood-collection-camps.show', $camp->id) }}"
-                                            class="btn btn-sm btn-info">View</a>
+                                            class="btn btn-xs btn-info">View</a>
                                         <a href="{{ route('backend.admin.blood-collection-camps.edit', $camp->id) }}"
-                                            class="btn btn-sm btn-warning">Edit</a>
+                                            class="btn btn-xs btn-warning">Edit</a>
                                         <form action="{{ route('backend.admin.blood-collection-camps.destroy', $camp->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"
+                                            <button class="btn btn-xs btn-danger"
                                                 onclick="return confirm('Delete this camp?')">Delete</button>
                                         </form>
                                     </td>

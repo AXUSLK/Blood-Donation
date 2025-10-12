@@ -27,12 +27,12 @@ class BloodTestFactory extends Factory
     public function definition(): array
     {
         $bloodUnit = BloodUnit::inRandomOrder()->first();
-        $technician = User::whereHas('roles', function($q) {
+        $technician = User::whereHas('roles', function ($q) {
             $q->where('name', 'lab_technician');
         })->inRandomOrder()->first();
-        
+
         $testDate = $this->faker->dateTimeBetween('-30 days', 'now');
-        
+
         // Generate test results
         $results = ['negative', 'positive', 'pending'];
         $hivResult = $this->faker->randomElement($results);
@@ -40,10 +40,10 @@ class BloodTestFactory extends Factory
         $hepatitisCResult = $this->faker->randomElement($results);
         $syphilisResult = $this->faker->randomElement($results);
         $malariaResult = $this->faker->randomElement($results);
-        
+
         // Determine overall status based on results
         $testResults = [$hivResult, $hepatitisBResult, $hepatitisCResult, $syphilisResult, $malariaResult];
-        
+
         $overallStatus = 'pending';
         if (!in_array('pending', $testResults)) {
             if (in_array('positive', $testResults)) {
@@ -56,14 +56,14 @@ class BloodTestFactory extends Factory
         return [
             'test_id' => 'TEST' . $this->faker->unique()->numberBetween(1000, 9999),
             'blood_unit_id' => $bloodUnit->id,
-            'technician_id' => $technician?->id,
+            'technician_id' => $this->faker->randomElement([2, 7]),
             'test_date' => $testDate,
             'hiv_result' => $hivResult,
             'hepatitis_b_result' => $hepatitisBResult,
             'hepatitis_c_result' => $hepatitisCResult,
             'syphilis_result' => $syphilisResult,
             'malaria_result' => $malariaResult,
-            'blood_group_result' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+            'blood_group' => $this->faker->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
             'overall_status' => $overallStatus,
             'test_notes' => $this->faker->optional(0.3)->sentence(),
             'lab_reference' => $this->faker->optional(0.7)->bothify('LAB-####-####'),

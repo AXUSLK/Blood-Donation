@@ -20,10 +20,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -37,7 +33,6 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::get('/dashboard', [BackendDashboardController::class, 'adminDashboard'])->name('dashboard');
 
             // New Dashboard Routes
-            Route::get('/analytics', [BackendAdminDashboardController::class, 'index'])->name('analytics');
             Route::get('/reports', [BackendAdminDashboardController::class, 'reports'])->name('reports');
             Route::post('/generate-report', [BackendAdminDashboardController::class, 'generateReport'])->name('generate-report');
 

@@ -40,62 +40,6 @@
                     </a>
                 </li>
 
-                {{-- Analytics & Reports --}}
-                <li class="nav-item {{ request()->routeIs('backend.admin.analytics') || request()->routeIs('backend.admin.reports') ? 'menu-open' : '' }}">
-                    <a href="#"
-                        class="nav-link {{ request()->routeIs('backend.admin.analytics') || request()->routeIs('backend.admin.reports') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-chart-bar"></i>
-                        <p>
-                            Analytics & Reports
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('backend.admin.analytics') }}"
-                                class="nav-link {{ request()->routeIs('backend.admin.analytics') ? 'active' : '' }}">
-                                <i class="far fa-chart-pie nav-icon"></i>
-                                <p>Analytics Dashboard</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('backend.admin.reports') }}"
-                                class="nav-link {{ request()->routeIs('backend.admin.reports') ? 'active' : '' }}">
-                                <i class="far fa-file-alt nav-icon"></i>
-                                <p>Generate Reports</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                {{-- AI Features --}}
-                <li class="nav-item {{ request()->routeIs('backend.admin.ai.*') ? 'menu-open' : '' }}">
-                    <a href="#"
-                        class="nav-link {{ request()->routeIs('backend.admin.ai.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-robot"></i>
-                        <p>
-                            AI Features
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('backend.admin.ai.compatibility') }}"
-                                class="nav-link {{ request()->routeIs('backend.admin.ai.compatibility*') ? 'active' : '' }}">
-                                <i class="far fa-heart nav-icon"></i>
-                                <p>Blood Compatibility</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('backend.admin.ai.eligibility') }}"
-                                class="nav-link {{ request()->routeIs('backend.admin.ai.eligibility*') ? 'active' : '' }}">
-                                <i class="far fa-user-check nav-icon"></i>
-                                <p>Donor Eligibility</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
                 {{-- Donors --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.donors.*') ? 'menu-open' : '' }}">
                     <a href="#"
@@ -125,7 +69,8 @@
                 </li>
 
                 {{-- Blood Collection Camps --}}
-                <li class="nav-item {{ request()->routeIs('backend.admin.blood-collection-camps.*') ? 'menu-open' : '' }}">
+                <li
+                    class="nav-item {{ request()->routeIs('backend.admin.blood-collection-camps.*') ? 'menu-open' : '' }}">
                     <a href="#"
                         class="nav-link {{ request()->routeIs('backend.admin.blood-collection-camps.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-hospital"></i>
@@ -259,6 +204,42 @@
                                 class="nav-link {{ request()->routeIs('backend.admin.blood-units.index') ? 'active' : '' }}">
                                 <i class="far fa-list-alt nav-icon"></i>
                                 <p>Manage Units</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Analytics & Reports --}}
+                <li class="nav-item">
+                    <a href="{{ route('backend.admin.reports') }}"
+                        class="nav-link {{ request()->routeIs('backend.admin.reports') ? 'active' : '' }}">
+                        <i class="far fa-file-alt nav-icon"></i>
+                        <p>Generate Reports</p>
+                    </a>
+                </li>
+
+                {{-- AI Features --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.ai.*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->routeIs('backend.admin.ai.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-robot"></i>
+                        <p>
+                            AI Features
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.ai.compatibility') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.ai.compatibility*') ? 'active' : '' }}">
+                                <i class="far fa-heart nav-icon"></i>
+                                <p>Blood Compatibility</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.ai.eligibility') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.ai.eligibility*') ? 'active' : '' }}">
+                                <i class="far fa-user-check nav-icon"></i>
+                                <p>Donor Eligibility</p>
                             </a>
                         </li>
                     </ul>

@@ -50,7 +50,7 @@
                                             <select name="donor_id" id="donor_id" class="form-control @error('donor_id') is-invalid @enderror" required>
                                                 <option value="">Select Donor</option>
                                                 @foreach ($donors as $donor)
-                                                    <option value="{{ $donor->id }}" {{ old('donor_id') == $donor->id ? 'selected' : '' }}>{{ $donor->name }}</option>
+                                                    <option value="{{ $donor->id }}" {{ old('donor_id') == $donor->id ? 'selected' : '' }}>{{ $donor->full_name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('donor_id')

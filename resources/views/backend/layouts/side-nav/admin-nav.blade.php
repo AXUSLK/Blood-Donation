@@ -68,6 +68,34 @@
                     </ul>
                 </li>
 
+                {{-- AI Features --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.ai.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.ai.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-robot"></i>
+                        <p>
+                            AI Features
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.ai.compatibility') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.ai.compatibility*') ? 'active' : '' }}">
+                                <i class="far fa-heart nav-icon"></i>
+                                <p>Blood Compatibility</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.ai.eligibility') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.ai.eligibility*') ? 'active' : '' }}">
+                                <i class="far fa-user-check nav-icon"></i>
+                                <p>Donor Eligibility</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- Donors --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.donors.*') ? 'menu-open' : '' }}">
                     <a href="#"

@@ -12,6 +12,8 @@ use App\Http\Controllers\Backend\Admin\BloodUnitController as BackendBloodUnitCo
 use App\Http\Controllers\Backend\Admin\BloodCollectionCampController as BackendBloodCollectionCampController;
 use App\Http\Controllers\Backend\Admin\BloodTestController as BackendBloodTestController;
 use App\Http\Controllers\Backend\Admin\DashboardController as BackendAdminDashboardController;
+use App\Http\Controllers\Backend\Admin\AICompatibilityController as BackendAICompatibilityController;
+use App\Http\Controllers\Backend\Admin\AIEligibilityController as BackendAIEligibilityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,11 +35,29 @@ Route::prefix('admin')->name('backend.')->group(function () {
         // Admin
         Route::name('admin.')->group(function () {
             Route::get('/dashboard', [BackendDashboardController::class, 'adminDashboard'])->name('dashboard');
-            
+
             // New Dashboard Routes
             Route::get('/analytics', [BackendAdminDashboardController::class, 'index'])->name('analytics');
             Route::get('/reports', [BackendAdminDashboardController::class, 'reports'])->name('reports');
             Route::post('/generate-report', [BackendAdminDashboardController::class, 'generateReport'])->name('generate-report');
+
+            // AI Features Routes
+            Route::get('/ai/compatibility', [BackendAICompatibilityController::class, 'index'])->name('ai.compatibility');
+            Route::post('/ai/compatibility/check', [BackendAICompatibilityController::class, 'checkCompatibility'])->name('ai.compatibility.check');
+            Route::get('/ai/eligibility', [BackendAIEligibilityController::class, 'index'])->name('ai.eligibility');
+            Route::post('/ai/eligibility/predict', [BackendAIEligibilityController::class, 'predictEligibility'])->name('ai.eligibility.predict');
+
+            // Debug route for testing AI
+            Route::get('/ai/test', function() {
+                return response()->json([
+                    'message' => 'AI routes are working!',
+                    'donors_count' => \App\Models\Donor::count(),
+                    'compatibility_test' => [
+                        'A+' => 'O+',
+                        'result' => 'Compatible'
+                    ]
+                ]);
+            })->name('ai.test');
 
             Route::resource('recipients', BackendRecipientController::class);
             Route::resource('donors', BackendDonorController::class);

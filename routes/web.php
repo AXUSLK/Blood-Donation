@@ -9,6 +9,8 @@ use App\Http\Controllers\Backend\Admin\RecipientController as BackendRecipientCo
 use App\Http\Controllers\Backend\Admin\DonorController as BackendDonorController;
 use App\Http\Controllers\Backend\Admin\BloodInventoryController as BackendBloodInventoryController;
 use App\Http\Controllers\Backend\Admin\BloodUnitController as BackendBloodUnitController;
+use App\Http\Controllers\Backend\Admin\BloodCollectionCampController as BackendBloodCollectionCampController;
+use App\Http\Controllers\Backend\Admin\BloodTestController as BackendBloodTestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,6 +39,13 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::post('blood-inventory/{bloodInventory}/toggle-status', [BackendBloodInventoryController::class, 'toggleStatus'])->name('blood-inventory.toggle-status');
             Route::resource('blood-units', BackendBloodUnitController::class);
             Route::post('blood-units/{bloodUnit}/mark-used', [BackendBloodUnitController::class, 'markAsUsed'])->name('blood-units.mark-used');
+
+            Route::resource('blood-collection-camps', BackendBloodCollectionCampController::class);
+            Route::post('blood-collection-camps/{bloodCollectionCamp}/update-status', [BackendBloodCollectionCampController::class, 'updateStatus'])->name('blood-collection-camps.update-status');
+
+            Route::resource('blood-tests', BackendBloodTestController::class);
+            Route::post('blood-tests/{bloodTest}/quarantine', [BackendBloodTestController::class, 'quarantine'])->name('blood-tests.quarantine');
+            Route::post('blood-tests/{bloodTest}/approve', [BackendBloodTestController::class, 'approve'])->name('blood-tests.approve');
 
             Route::resource('users', UserController::class);
             Route::resource('roles', RoleController::class);

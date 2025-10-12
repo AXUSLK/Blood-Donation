@@ -68,6 +68,62 @@
                     </ul>
                 </li>
 
+                {{-- Blood Collection Camps --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.blood-collection-camps.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.blood-collection-camps.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-hospital"></i>
+                        <p>
+                            Collection Camps
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-collection-camps.create') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-collection-camps.create') ? 'active' : '' }}">
+                                <i class="far fa-plus-square nav-icon"></i>
+                                <p>Schedule Camp</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-collection-camps.index') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-collection-camps.index') ? 'active' : '' }}">
+                                <i class="far fa-list-alt nav-icon"></i>
+                                <p>Manage Camps</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Blood Testing --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.blood-tests.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.blood-tests.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-flask"></i>
+                        <p>
+                            Blood Testing
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-tests.create') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-tests.create') ? 'active' : '' }}">
+                                <i class="far fa-plus-square nav-icon"></i>
+                                <p>Add Test</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-tests.index') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-tests.index') ? 'active' : '' }}">
+                                <i class="far fa-list-alt nav-icon"></i>
+                                <p>Manage Tests</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- Recipients --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.recipients.*') ? 'menu-open' : '' }}">
                     <a href="#"

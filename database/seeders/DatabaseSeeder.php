@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
             RecipientSeeder::class,
             DonorSeeder::class,
             BloodInventorySeeder::class,
-            BloodUnitSeeder::class
+            BloodUnitSeeder::class,
+            BloodTestSeeder::class,
+            BloodCollectionCampSeeder::class
         ]);
     }
 }

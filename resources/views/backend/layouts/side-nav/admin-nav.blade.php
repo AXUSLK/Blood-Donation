@@ -40,6 +40,34 @@
                     </a>
                 </li>
 
+                {{-- Analytics & Reports --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.analytics') || request()->routeIs('backend.admin.reports') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.analytics') || request()->routeIs('backend.admin.reports') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-chart-bar"></i>
+                        <p>
+                            Analytics & Reports
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.analytics') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.analytics') ? 'active' : '' }}">
+                                <i class="far fa-chart-pie nav-icon"></i>
+                                <p>Analytics Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.reports') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.reports') ? 'active' : '' }}">
+                                <i class="far fa-file-alt nav-icon"></i>
+                                <p>Generate Reports</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- Donors --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.donors.*') ? 'menu-open' : '' }}">
                     <a href="#"

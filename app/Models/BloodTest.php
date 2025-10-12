@@ -30,7 +30,9 @@ class BloodTest extends Model
     protected function casts(): array
     {
         return [
-            'test_date' => 'date',
+            'test_date' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -54,6 +56,16 @@ class BloodTest extends Model
         return $query->where('overall_status', 'quarantined');
     }
 
+    public function scopeApproved($query)
+    {
+        return $query->where('overall_status', 'passed');
+    }
+
+    public function scopeRejected($query)
+    {
+        return $query->where('overall_status', 'failed');
+    }
+
     public function scopeByResult($query, $result)
     {
         return $query->where('overall_status', $result);
@@ -70,12 +82,12 @@ class BloodTest extends Model
         return $this->belongsTo(User::class, 'technician_id');
     }
 
-    public function createBy()
+    public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updateBy()
+    public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }

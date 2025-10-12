@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\Admin\BloodInventoryController as BackendBloodI
 use App\Http\Controllers\Backend\Admin\BloodUnitController as BackendBloodUnitController;
 use App\Http\Controllers\Backend\Admin\BloodCollectionCampController as BackendBloodCollectionCampController;
 use App\Http\Controllers\Backend\Admin\BloodTestController as BackendBloodTestController;
+use App\Http\Controllers\Backend\Admin\DashboardController as BackendAdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,11 @@ Route::prefix('admin')->name('backend.')->group(function () {
         // Admin
         Route::name('admin.')->group(function () {
             Route::get('/dashboard', [BackendDashboardController::class, 'adminDashboard'])->name('dashboard');
+            
+            // New Dashboard Routes
+            Route::get('/analytics', [BackendAdminDashboardController::class, 'index'])->name('analytics');
+            Route::get('/reports', [BackendAdminDashboardController::class, 'reports'])->name('reports');
+            Route::post('/generate-report', [BackendAdminDashboardController::class, 'generateReport'])->name('generate-report');
 
             Route::resource('recipients', BackendRecipientController::class);
             Route::resource('donors', BackendDonorController::class);

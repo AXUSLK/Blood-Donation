@@ -42,19 +42,8 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::get('/ai/eligibility', [BackendAIEligibilityController::class, 'index'])->name('ai.eligibility');
             Route::post('/ai/eligibility/predict', [BackendAIEligibilityController::class, 'predictEligibility'])->name('ai.eligibility.predict');
 
-            // Debug route for testing AI
-            Route::get('/ai/test', function() {
-                return response()->json([
-                    'message' => 'AI routes are working!',
-                    'donors_count' => \App\Models\Donor::count(),
-                    'compatibility_test' => [
-                        'A+' => 'O+',
-                        'result' => 'Compatible'
-                    ]
-                ]);
-            })->name('ai.test');
-
             Route::resource('recipients', BackendRecipientController::class);
+            Route::post('recipients/{recipient}/toggle-status', [BackendRecipientController::class, 'toggleStatus'])->name('recipients.toggle-status');
             Route::resource('donors', BackendDonorController::class);
             Route::resource('blood-inventory', BackendBloodInventoryController::class);
             Route::post('blood-inventory/{bloodInventory}/toggle-status', [BackendBloodInventoryController::class, 'toggleStatus'])->name('blood-inventory.toggle-status');

@@ -238,7 +238,7 @@
                         <li class="nav-item">
                             <a href="{{ route('backend.admin.ai.eligibility') }}"
                                 class="nav-link {{ request()->routeIs('backend.admin.ai.eligibility*') ? 'active' : '' }}">
-                                <i class="far fa-user-check nav-icon"></i>
+                                <i class="fas fa-user-check nav-icon"></i>
                                 <p>Donor Eligibility</p>
                             </a>
                         </li>

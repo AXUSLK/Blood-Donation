@@ -94,7 +94,7 @@
                                 <th>Contact</th>
                                 <th>Status</th>
                                 <th>Created At</th>
-                                <th width="150">Actions</th>
+                                <th width="180">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -102,7 +102,7 @@
                                 <tr>
                                     <td>{{ $recipient->id }}</td>
                                     <td>{{ $recipient->patient_code }}</td>
-                                    <td>{{ $recipient->name }}</td>
+                                    <td>{{ $recipient->full_name }}</td>
                                     <td>
                                         {{ $recipient->userBloodGroup?->name ?? '-' }}
                                     </td>
@@ -122,8 +122,10 @@
                                     </td>
                                     <td>{{ $recipient->created_at->format('Y-m-d') }}</td>
                                     <td>
+                                        <a href="{{ route('backend.admin.recipients.show', $recipient->id) }}"
+                                            class="btn btn-xs btn-info">View</a>
                                         <a href="{{ route('backend.admin.recipients.edit', $recipient->id) }}"
-                                            class="btn btn-xs btn-info">Edit</a>
+                                            class="btn btn-xs btn-warning">Edit</a>
                                         <form action="{{ route('backend.admin.recipients.destroy', $recipient->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf @method('DELETE')

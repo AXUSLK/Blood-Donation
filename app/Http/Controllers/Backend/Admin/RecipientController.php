@@ -5,25 +5,37 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Lov;
 use App\Models\Recipient;
+use App\Services\Backend\Admin\RecipientStoreService;
+use App\Services\Backend\Admin\RecipientUpdateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RecipientController extends Controller
 {
+    protected $storeService;
+    protected $updateService;
+
+    public function __construct(RecipientStoreService $storeService, RecipientUpdateService $updateService)
+    {
+        $this->storeService = $storeService;
+        $this->updateService = $updateService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $search      = $request->input('search');
+        $search = $request->input('search');
         $blood_group = $request->input('blood_group');
-        $gender      = $request->input('gender');
-        $status      = $request->input('status');
+        $gender = $request->input('gender');
+        $status = $request->input('status');
 
-        $recipients = Recipient::with(['userBloodGroup', 'userGender'])
+        $recipients = Recipient::with(['userBloodGroup', 'userGender', 'userTitle'])
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
+                    $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
                         ->orWhere('patient_code', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('contact_number', 'like', "%{$search}%");
@@ -64,30 +76,12 @@ class RecipientController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'patient_code'             => 'required|string|unique:recipients',
-            'name'                     => 'required|string|max:255',
-            'dob'                      => 'required|date',
-            'gender'                   => 'required|string',
-            'blood_group'              => 'required|string',
-            'contact_number'           => 'required|string|max:20',
-            'email'                    => 'nullable|email',
-            'address'                  => 'nullable|string',
-            'hospital_name'            => 'nullable|string',
-            'doctor_name'              => 'required|string|max:255',
-            'admission_date'           => 'nullable|date',
-            'blood_required_date'      => 'nullable|date',
-            'blood_quantity_required'  => 'nullable|integer|min:1',
-            'request_status'           => 'required|in:pending,accepted,fulfilled,rejected',
-            'diagnosis'                => 'required|string',
-            'notes'                    => 'nullable|string',
-        ]);
-
-        $validated['created_by'] = Auth::id();
-
-        Recipient::create($validated);
-
-        return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient added successfully.');
+        try {
+            $recipient = $this->storeService->store($request->all());
+            return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient registered successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Failed to register recipient: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -95,6 +89,7 @@ class RecipientController extends Controller
      */
     public function show(Recipient $recipient)
     {
+        $recipient->load(['userBloodGroup', 'userGender', 'userTitle', 'createBy', 'updateBy']);
         return view('backend.admin.recipients.show', compact('recipient'));
     }
 
@@ -114,28 +109,12 @@ class RecipientController extends Controller
      */
     public function update(Request $request, Recipient $recipient)
     {
-        $validated = $request->validate([
-            'patient_code'             => 'required|string|unique:recipients,patient_code,' . $recipient->id,
-            'name'                     => 'required|string|max:255',
-            'dob'                      => 'required|date',
-            'gender'                   => 'required|string',
-            'blood_group'              => 'required|string',
-            'contact_number'           => 'required|string|max:20',
-            'email'                    => 'nullable|email',
-            'address'                  => 'nullable|string',
-            'hospital_name'            => 'nullable|string',
-            'doctor_name'              => 'required|string|max:255',
-            'admission_date'           => 'nullable|date',
-            'blood_required_date'      => 'nullable|date',
-            'blood_quantity_required'  => 'nullable|integer|min:1',
-            'request_status'           => 'required|in:pending,accepted,fulfilled,rejected',
-            'diagnosis'                => 'required|string',
-            'notes'                    => 'nullable|string',
-        ]);
-
-        $recipient->update($validated);
-
-        return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient updated successfully.');
+        try {
+            $this->updateService->update($recipient, $request->all());
+            return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Failed to update recipient: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -143,7 +122,29 @@ class RecipientController extends Controller
      */
     public function destroy(Recipient $recipient)
     {
-        $recipient->delete();
-        return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient deleted successfully.');
+        try {
+            $recipient->delete();
+            return redirect()->route('backend.admin.recipients.index')->with('success', 'Recipient deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete recipient: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Toggle recipient status
+     */
+    public function toggleStatus(Recipient $recipient)
+    {
+        try {
+            $recipient->update([
+                'status' => !$recipient->status,
+                'updated_by' => Auth::user()->id,
+            ]);
+
+            $status = $recipient->status ? 'activated' : 'deactivated';
+            return redirect()->back()->with('success', "Recipient {$status} successfully.");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update recipient status: ' . $e->getMessage());
+        }
     }
 }

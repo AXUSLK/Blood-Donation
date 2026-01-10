@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lov;
 use App\Models\User;
 use App\Rules\PhoneNumber;
+use App\Services\DonorService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,6 +63,19 @@ class RegisteredUserController extends Controller
             'age' => $request->age,
         ]);
         $user->syncRoles([5]);
+
+        // Create Donor record linked to User
+        $donorService = new DonorService();
+        $donorService->createDonorFromUser([
+            'title' => $request->title,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'blood_group' => $request->blood_group,
+            'gender' => $request->gender,
+            'dob' => $request->dob,
+        ]);
 
         event(new Registered($user));
 

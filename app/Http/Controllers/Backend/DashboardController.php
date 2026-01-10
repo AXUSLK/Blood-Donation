@@ -78,7 +78,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $donor = $user->donor;
-dd( $user);
+
         if (!$donor) {
             Auth::logout();
             return redirect()->route('login')

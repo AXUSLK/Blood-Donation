@@ -3,9 +3,11 @@
 namespace App\Services\Backend\Admin;
 
 use App\Models\Donor;
+use App\Models\User;
 use App\Rules\PhoneNumber;
 use App\Rules\AgeMatchesDob;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DonorStoreService
@@ -40,6 +42,9 @@ class DonorStoreService
             'eligibility_reason' => $this->getEligibilityReason($validated),
             'created_by' => Auth::user()->id,
         ]);
+
+        // Create User account if it doesn't exist
+        $this->createUserIfNotExists($validated);
 
         return $donor;
     }
@@ -119,5 +124,40 @@ class DonorStoreService
         }
 
         return null;
+    }
+
+    /**
+     * Create User account if it doesn't exist for the donor
+     */
+    protected function createUserIfNotExists(array $donorData): void
+    {
+        $user = User::where('email', $donorData['email'])->first();
+
+        if (!$user) {
+            // Generate a random password
+            $tempPassword = Str::random(12);
+
+            $user = User::create([
+                'title' => $donorData['title'],
+                'first_name' => $donorData['first_name'],
+                'last_name' => $donorData['last_name'],
+                'email' => $donorData['email'],
+                'phone' => $donorData['phone'],
+                'password' => Hash::make($tempPassword),
+                'blood_group' => $donorData['blood_group'],
+                'gender' => $donorData['gender'],
+                'dob' => $donorData['dob'],
+                'age' => $donorData['age'],
+            ]);
+
+            // Assign Donor role
+            $user->assignRole(5);
+
+        } else {
+            // User exists, ensure they have Donor role
+            if (!$user->hasRole('Donor')) {
+                $user->assignRole(5);
+            }
+        }
     }
 }

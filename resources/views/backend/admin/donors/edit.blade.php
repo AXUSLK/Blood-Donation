@@ -143,14 +143,15 @@
 
                                         <div class="form-group">
                                             <label>Date of Birth</label>
-                                            <input type="date" name="dob" class="form-control"
+                                            <input type="date" name="dob" id="dob" class="form-control"
                                                 value="{{ old('dob', $donor->dob?->format('Y-m-d')) }}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Age</label>
-                                            <input type="number" name="age" class="form-control" min="18" max="65"
+                                            <input type="number" name="age" id="age" class="form-control" min="18" max="65"
                                                 value="{{ old('age', $donor->age) }}" required>
+                                            <div id="age-error" class="invalid-feedback" style="display: none;"></div>
                                         </div>
 
                                         <div class="form-group">
@@ -240,3 +241,70 @@
     </section>
     <!-- /.content -->
 @endsection
+
+@section('custom-js')
+<script>
+    $(document).ready(function() {
+        var dobInput = $('#dob');
+        var ageInput = $('#age');
+        var ageErrorDiv = $('#age-error');
+
+        // Validate when user leaves the age field
+        ageInput.on('blur', function() {
+            var dob = dobInput.val();
+            var age = ageInput.val();
+
+            // Only validate if both fields have values
+            if (!dob || !age) {
+                return;
+            }
+
+            // Clear previous error
+            ageErrorDiv.hide().html('');
+            ageInput.removeClass('is-invalid');
+
+            // Send AJAX request to validate
+            $.ajax({
+                url: '{{ route("backend.admin.donors.validate-dob") }}',
+                method: 'POST',
+                data: {
+                    dob: dob,
+                    age: age,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (!response.valid) {
+                        // Show errors on age field
+                        if (response.errors && response.errors.length > 0) {
+                            ageErrorDiv.html(response.errors.join('<br>')).show();
+                            ageInput.addClass('is-invalid');
+                        }
+                    } else {
+                        // Remove error if valid
+                        ageInput.removeClass('is-invalid');
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        var errors = xhr.responseJSON.errors;
+                        var errorMessages = [];
+                        
+                        if (errors.age) {
+                            errorMessages = errorMessages.concat(errors.age);
+                        }
+                        if (errors.dob) {
+                            errorMessages = errorMessages.concat(errors.dob);
+                        }
+
+                        if (errorMessages.length > 0) {
+                            ageErrorDiv.html(errorMessages.join('<br>')).show();
+                            ageInput.addClass('is-invalid');
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>
+@endsection
+

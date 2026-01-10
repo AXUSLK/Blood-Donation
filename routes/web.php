@@ -45,6 +45,7 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::resource('recipients', BackendRecipientController::class);
             Route::post('recipients/{recipient}/toggle-status', [BackendRecipientController::class, 'toggleStatus'])->name('recipients.toggle-status');
             Route::resource('donors', BackendDonorController::class);
+            Route::post('donors/validate-dob', [BackendDonorController::class, 'validateDob'])->name('donors.validate-dob');
             Route::resource('blood-inventory', BackendBloodInventoryController::class);
             Route::post('blood-inventory/{bloodInventory}/toggle-status', [BackendBloodInventoryController::class, 'toggleStatus'])->name('blood-inventory.toggle-status');
             Route::resource('blood-units', BackendBloodUnitController::class);

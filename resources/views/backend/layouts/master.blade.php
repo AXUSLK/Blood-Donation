@@ -33,7 +33,7 @@
         <!-- /.content-wrapper -->
 
         <!-- Control Sidebar -->
-        @include('backend.layouts.sidebar')
+        {{-- @include('backend.layouts.sidebar') --}}
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->

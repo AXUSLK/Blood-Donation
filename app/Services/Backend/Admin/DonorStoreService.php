@@ -4,6 +4,7 @@ namespace App\Services\Backend\Admin;
 
 use App\Models\Donor;
 use App\Rules\PhoneNumber;
+use App\Rules\AgeMatchesDob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -57,7 +58,7 @@ class DonorStoreService
             'blood_group' => 'required|string',
             'gender' => 'required|string',
             'dob' => 'required|date|before:today',
-            'age' => 'required|integer|min:18|max:65',
+            'age' => ['required', 'integer', 'min:18', 'max:65', new AgeMatchesDob($data['dob'] ?? null)],
             'weight' => 'required|numeric|min:45|max:200',
             'height' => 'nullable|numeric|min:100|max:250',
             'medical_history' => 'nullable|string|max:1000',

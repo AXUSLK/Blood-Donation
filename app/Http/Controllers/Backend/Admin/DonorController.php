@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Services\Backend\Admin\DonorStoreService;
 use App\Services\Backend\Admin\DonorUpdateService;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class DonorController extends Controller
 {
@@ -146,6 +147,47 @@ class DonorController extends Controller
             'eligible_donors' => $eligibleDonors,
             'new_donors_this_month' => $newDonorsThisMonth,
             'total_donations' => $totalDonations,
+        ]);
+    }
+
+    /**
+     * Validate date of birth and age via AJAX.
+     */
+    public function validateDob(Request $request)
+    {
+        $request->validate([
+            'dob' => 'required|date|before:today',
+            'age' => 'required|integer|min:18|max:65',
+        ]);
+
+        $dob = Carbon::parse($request->dob);
+        $today = Carbon::today();
+        $calculatedAge = (int) $dob->diffInYears($today);
+        $providedAge = (int) $request->age;
+
+        $errors = [];
+
+        // Check if date is in the future
+        if ($dob->isFuture()) {
+            $errors[] = 'Date of birth cannot be in the future.';
+        }
+
+        // Check age range based on DOB
+        if ($calculatedAge < 18) {
+            $errors[] = 'Donor must be at least 18 years old. Current age from date of birth: ' . $calculatedAge . ' years.';
+        } elseif ($calculatedAge > 65) {
+            $errors[] = 'Donor must be 65 years or younger. Current age from date of birth: ' . $calculatedAge . ' years.';
+        }
+
+        // Check if provided age matches calculated age
+        if ($providedAge != $calculatedAge) {
+            $errors[] = 'Age does not match the date of birth. Based on the date of birth, the age should be ' . $calculatedAge . ' years.';
+        }
+
+        return response()->json([
+            'valid' => empty($errors),
+            'calculated_age' => $calculatedAge,
+            'errors' => $errors,
         ]);
     }
 }

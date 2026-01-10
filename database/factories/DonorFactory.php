@@ -12,10 +12,10 @@ class DonorFactory extends Factory
 
     public function definition()
     {
-        $bloodGroups = ['13', '14', '15', '16', '17', '18', '19', '20'];
-        $genders = ['1', '2', '3'];
-        $titles = ['4', '5', '6', '7'];
-        $relations = ['Father', 'Mother', 'Brother', 'Sister', 'Spouse', 'Friend'];
+        $bloodGroups = ['13', '14', '15', '16', '17', '18', '19', '20']; // LOV IDs for blood groups
+        $genders = ['1', '2', '3']; // LOV IDs for Genders
+        $titles = ['4', '5', '6', '7']; // LOV IDs for Titles
+        $relations = ['Father', 'Mother', 'Brother', 'Sister', 'Spouse', 'Friend']; // Emergency contact relations
 
         $age = $this->faker->numberBetween(18, 65);
         $weight = $this->faker->numberBetween(45, 100);
@@ -47,7 +47,7 @@ class DonorFactory extends Factory
             'emergency_contact_name' => $this->faker->name,
             'emergency_contact_phone' => $this->faker->numerify('##########'),
             'emergency_contact_relation' => $this->faker->randomElement($relations),
-            'status' => $this->faker->boolean(90), 
+            'status' => $this->faker->boolean(90),
             'created_by' => \App\Models\User::inRandomOrder()->first()?->id ?? 1,
         ];
     }

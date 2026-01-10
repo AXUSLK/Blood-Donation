@@ -88,11 +88,15 @@
                                         </tr>
                                         <tr>
                                             <th>City:</th>
-                                            <td>{{ $recipient->city ?? '-' }}</td>
+                                            <td>{{ $contactInfo['city'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>District:</th>
                                             <td>{{ $recipient->district ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Full Address:</th>
+                                            <td>{{ $contactInfo['address'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Request Status:</th>

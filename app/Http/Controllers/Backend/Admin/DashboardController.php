@@ -282,13 +282,43 @@ class DashboardController extends Controller
             ->whereBetween('created_at', [$dateFrom, $dateTo])
             ->get();
 
-        // For now, return JSON data (in real implementation, you'd generate PDF/Excel)
-        return response()->json([
-            'report_type' => 'Donor Report',
-            'period' => $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y'),
-            'total_donors' => $donors->count(),
-            'data' => $donors
-        ]);
+        $reportTitle = 'Donor Report';
+        $period = $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y');
+        $filename = 'donor_report_' . $dateFrom->format('Y-m-d') . '_to_' . $dateTo->format('Y-m-d');
+
+        if ($format === 'excel') {
+            return $this->generateCsv($donors, $filename, [
+                'Donor ID', 'First Name', 'Last Name', 'Email', 'Phone', 
+                'Blood Group', 'Gender', 'Date of Birth', 'Age', 'Total Donations', 'Status'
+            ], function($donor) {
+                return [
+                    $donor->donor_id,
+                    $donor->first_name,
+                    $donor->last_name,
+                    $donor->email,
+                    $donor->phone,
+                    $donor->userBloodGroup->name ?? 'N/A',
+                    $donor->userGender->name ?? 'N/A',
+                    $donor->dob ? $donor->dob->format('Y-m-d') : 'N/A',
+                    $donor->age,
+                    $donor->total_donations ?? 0,
+                    $donor->is_eligible ? 'Eligible' : 'Not Eligible'
+                ];
+            });
+        } else {
+            return $this->generatePdf($donors, $reportTitle, $period, $filename, [
+                'Donor ID', 'Name', 'Email', 'Blood Group', 'Total Donations', 'Status'
+            ], function($donor) {
+                return [
+                    $donor->donor_id,
+                    $donor->first_name . ' ' . $donor->last_name,
+                    $donor->email,
+                    $donor->userBloodGroup->name ?? 'N/A',
+                    $donor->total_donations ?? 0,
+                    $donor->is_eligible ? 'Eligible' : 'Not Eligible'
+                ];
+            });
+        }
     }
 
     private function generateBloodUnitReport($dateFrom, $dateTo, $format)
@@ -297,12 +327,38 @@ class DashboardController extends Controller
             ->whereBetween('created_at', [$dateFrom, $dateTo])
             ->get();
 
-        return response()->json([
-            'report_type' => 'Blood Unit Report',
-            'period' => $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y'),
-            'total_units' => $units->count(),
-            'data' => $units
-        ]);
+        $reportTitle = 'Blood Unit Report';
+        $period = $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y');
+        $filename = 'blood_unit_report_' . $dateFrom->format('Y-m-d') . '_to_' . $dateTo->format('Y-m-d');
+
+        if ($format === 'excel') {
+            return $this->generateCsv($units, $filename, [
+                'Unit ID', 'Blood Group', 'Donor', 'Collection Date', 'Expiry Date', 'Status', 'Storage Location'
+            ], function($unit) {
+                return [
+                    $unit->unit_id,
+                    $unit->blood_group,
+                    $unit->donor ? $unit->donor->first_name . ' ' . $unit->donor->last_name : 'N/A',
+                    $unit->collection_date ? $unit->collection_date->format('Y-m-d') : 'N/A',
+                    $unit->expiry_date ? $unit->expiry_date->format('Y-m-d') : 'N/A',
+                    ucfirst($unit->status),
+                    $unit->storage_location ?? 'N/A'
+                ];
+            });
+        } else {
+            return $this->generatePdf($units, $reportTitle, $period, $filename, [
+                'Unit ID', 'Blood Group', 'Donor', 'Collection Date', 'Expiry Date', 'Status'
+            ], function($unit) {
+                return [
+                    $unit->unit_id,
+                    $unit->blood_group,
+                    $unit->donor ? $unit->donor->first_name . ' ' . $unit->donor->last_name : 'N/A',
+                    $unit->collection_date ? $unit->collection_date->format('Y-m-d') : 'N/A',
+                    $unit->expiry_date ? $unit->expiry_date->format('Y-m-d') : 'N/A',
+                    ucfirst($unit->status)
+                ];
+            });
+        }
     }
 
     private function generateDonationReport($dateFrom, $dateTo, $format)
@@ -311,12 +367,37 @@ class DashboardController extends Controller
             ->whereBetween('donation_date', [$dateFrom, $dateTo])
             ->get();
 
-        return response()->json([
-            'report_type' => 'Donation Report',
-            'period' => $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y'),
-            'total_donations' => $donations->count(),
-            'data' => $donations
-        ]);
+        $reportTitle = 'Donation Report';
+        $period = $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y');
+        $filename = 'donation_report_' . $dateFrom->format('Y-m-d') . '_to_' . $dateTo->format('Y-m-d');
+
+        if ($format === 'excel') {
+            return $this->generateCsv($donations, $filename, [
+                'Donation ID', 'Donor', 'Blood Group', 'Donation Date', 'Volume (ml)', 'Status'
+            ], function($donation) {
+                return [
+                    $donation->id,
+                    $donation->donor ? $donation->donor->first_name . ' ' . $donation->donor->last_name : 'N/A',
+                    $donation->blood_group ?? 'N/A',
+                    $donation->donation_date ? $donation->donation_date->format('Y-m-d') : 'N/A',
+                    $donation->volume ?? 'N/A',
+                    ucfirst($donation->status ?? 'Completed')
+                ];
+            });
+        } else {
+            return $this->generatePdf($donations, $reportTitle, $period, $filename, [
+                'Donation ID', 'Donor', 'Blood Group', 'Donation Date', 'Volume (ml)', 'Status'
+            ], function($donation) {
+                return [
+                    $donation->id,
+                    $donation->donor ? $donation->donor->first_name . ' ' . $donation->donor->last_name : 'N/A',
+                    $donation->blood_group ?? 'N/A',
+                    $donation->donation_date ? $donation->donation_date->format('Y-m-d') : 'N/A',
+                    $donation->volume ?? 'N/A',
+                    ucfirst($donation->status ?? 'Completed')
+                ];
+            });
+        }
     }
 
     private function generateTestReport($dateFrom, $dateTo, $format)
@@ -325,12 +406,36 @@ class DashboardController extends Controller
             ->whereBetween('created_at', [$dateFrom, $dateTo])
             ->get();
 
-        return response()->json([
-            'report_type' => 'Test Report',
-            'period' => $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y'),
-            'total_tests' => $tests->count(),
-            'data' => $tests
-        ]);
+        $reportTitle = 'Test Report';
+        $period = $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y');
+        $filename = 'test_report_' . $dateFrom->format('Y-m-d') . '_to_' . $dateTo->format('Y-m-d');
+
+        if ($format === 'excel') {
+            return $this->generateCsv($tests, $filename, [
+                'Test ID', 'Blood Unit', 'Test Date', 'Result', 'Status', 'Technician'
+            ], function($test) {
+                return [
+                    $test->id,
+                    $test->bloodUnit ? $test->bloodUnit->unit_id : 'N/A',
+                    $test->test_date ? $test->test_date->format('Y-m-d') : 'N/A',
+                    ucfirst($test->result ?? 'N/A'),
+                    ucfirst($test->status ?? 'Pending'),
+                    $test->technician ? $test->technician->first_name . ' ' . $test->technician->last_name : 'N/A'
+                ];
+            });
+        } else {
+            return $this->generatePdf($tests, $reportTitle, $period, $filename, [
+                'Test ID', 'Blood Unit', 'Test Date', 'Result', 'Status'
+            ], function($test) {
+                return [
+                    $test->id,
+                    $test->bloodUnit ? $test->bloodUnit->unit_id : 'N/A',
+                    $test->test_date ? $test->test_date->format('Y-m-d') : 'N/A',
+                    ucfirst($test->result ?? 'N/A'),
+                    ucfirst($test->status ?? 'Pending')
+                ];
+            });
+        }
     }
 
     private function generateCampReport($dateFrom, $dateTo, $format)
@@ -339,11 +444,78 @@ class DashboardController extends Controller
             ->whereBetween('start_date', [$dateFrom, $dateTo])
             ->get();
 
-        return response()->json([
-            'report_type' => 'Camp Report',
-            'period' => $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y'),
-            'total_camps' => $camps->count(),
-            'data' => $camps
-        ]);
+        $reportTitle = 'Camp Report';
+        $period = $dateFrom->format('M d, Y') . ' - ' . $dateTo->format('M d, Y');
+        $filename = 'camp_report_' . $dateFrom->format('Y-m-d') . '_to_' . $dateTo->format('Y-m-d');
+
+        if ($format === 'excel') {
+            return $this->generateCsv($camps, $filename, [
+                'Camp Name', 'Location', 'Start Date', 'End Date', 'Target Donors', 'Actual Donors', 'Status'
+            ], function($camp) {
+                return [
+                    $camp->name,
+                    $camp->location,
+                    $camp->start_date ? $camp->start_date->format('Y-m-d') : 'N/A',
+                    $camp->end_date ? $camp->end_date->format('Y-m-d') : 'N/A',
+                    $camp->target_donors ?? 0,
+                    $camp->actual_donors ?? 0,
+                    ucfirst($camp->status ?? 'Pending')
+                ];
+            });
+        } else {
+            return $this->generatePdf($camps, $reportTitle, $period, $filename, [
+                'Camp Name', 'Location', 'Start Date', 'Target Donors', 'Actual Donors', 'Status'
+            ], function($camp) {
+                return [
+                    $camp->name,
+                    $camp->location,
+                    $camp->start_date ? $camp->start_date->format('Y-m-d') : 'N/A',
+                    $camp->target_donors ?? 0,
+                    $camp->actual_donors ?? 0,
+                    ucfirst($camp->status ?? 'Pending')
+                ];
+            });
+        }
+    }
+
+    private function generateCsv($data, $filename, $headers, $rowCallback)
+    {
+        $output = fopen('php://temp', 'r+');
+        
+        // Add BOM for UTF-8 (helps Excel display special characters correctly)
+        fwrite($output, "\xEF\xBB\xBF");
+        
+        // Write headers
+        fputcsv($output, $headers);
+        
+        // Write data rows
+        foreach ($data as $item) {
+            fputcsv($output, $rowCallback($item));
+        }
+        
+        rewind($output);
+        $csv = stream_get_contents($output);
+        fclose($output);
+        
+        return response($csv)
+            ->header('Content-Type', 'text/csv; charset=UTF-8')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '.csv"');
+    }
+
+    private function generatePdf($data, $title, $period, $filename, $headers, $rowCallback)
+    {
+        $html = view('backend.admin.dashboard.report-pdf', [
+            'title' => $title,
+            'period' => $period,
+            'headers' => $headers,
+            'data' => $data,
+            'rowCallback' => $rowCallback
+        ])->render();
+        
+        // Return HTML that can be printed to PDF by the browser
+        // Users can use browser's "Print to PDF" feature
+        return response($html)
+            ->header('Content-Type', 'text/html')
+            ->header('Content-Disposition', 'inline; filename="' . $filename . '.html"');
     }
 }

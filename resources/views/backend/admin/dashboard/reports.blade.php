@@ -319,24 +319,10 @@
         `;
             }
 
-            // Form submission handler
+            // Form submission handler - allow normal submission for file downloads
             document.getElementById('reportForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-
-                fetch(this.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    displayReportResults(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error generating report');
-                });
+                // Let the form submit normally to trigger file download
+                // No need to prevent default or use AJAX for file downloads
             });
     </script>
 @endpush

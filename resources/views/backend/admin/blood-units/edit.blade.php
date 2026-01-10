@@ -10,7 +10,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('backend.admin.blood-units.index') }}">Blood Units</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('backend.admin.blood-units.index') }}">Blood Units</a>
+                        </li>
                         <li class="breadcrumb-item active">Edit Blood Unit</li>
                     </ol>
                 </div>
@@ -35,17 +36,19 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="unit_id">Unit ID <span class="text-danger">*</span></label>
-                                            <input type="text" name="unit_id" id="unit_id"
-                                                   class="form-control" readonly
-                                                   value="{{ old('unit_id', $bloodUnit->unit_id) }}">
+                                            <input type="text" name="unit_id" id="unit_id" class="form-control"
+                                                readonly value="{{ old('unit_id', $bloodUnit->unit_id) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="donor_id">Donor <span class="text-danger">*</span></label>
-                                            <select name="donor_id" id="donor_id" class="form-control @error('donor_id') is-invalid @enderror" required>
+                                            <select name="donor_id" id="donor_id"
+                                                class="form-control @error('donor_id') is-invalid @enderror" required>
                                                 @foreach ($donors as $donor)
-                                                    <option value="{{ $donor->id }}" {{ old('donor_id', $bloodUnit->donor_id) == $donor->id ? 'selected' : '' }}>{{ $donor->full_name }}</option>
+                                                    <option value="{{ $donor->id }}"
+                                                        {{ old('donor_id', $bloodUnit->donor_id) == $donor->id ? 'selected' : '' }}>
+                                                        {{ $donor->full_name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('donor_id')
@@ -61,10 +64,13 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="blood_group">Blood Group <span class="text-danger">*</span></label>
-                                            <select name="blood_group" id="blood_group" class="form-control @error('blood_group') is-invalid @enderror" required>
+                                            <select name="blood_group" id="blood_group"
+                                                class="form-control @error('blood_group') is-invalid @enderror" required>
                                                 <option value="">Select Blood Group</option>
                                                 @foreach ($bloodGroups as $bloodGroup)
-                                                    <option value="{{ $bloodGroup->id }}" {{ old('blood_group', $bloodUnit->blood_group) == $bloodGroup->id ? 'selected' : '' }}>{{ $bloodGroup->name }}</option>
+                                                    <option value="{{ $bloodGroup->id }}"
+                                                        {{ old('blood_group', $bloodUnit->blood_group) == $bloodGroup->id ? 'selected' : '' }}>
+                                                        {{ $bloodGroup->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('blood_group')
@@ -77,10 +83,13 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="blood_type">Blood Type <span class="text-danger">*</span></label>
-                                            <select name="blood_type" id="blood_type" class="form-control @error('blood_type') is-invalid @enderror" required>
+                                            <select name="blood_type" id="blood_type"
+                                                class="form-control @error('blood_type') is-invalid @enderror" required>
                                                 <option value="">Select Blood Type</option>
                                                 @foreach ($bloodTypes as $bloodType)
-                                                    <option value="{{ $bloodType->id }}" {{ old('blood_type', $bloodUnit->blood_type) == $bloodType->id ? 'selected' : '' }}>{{ $bloodType->name }}</option>
+                                                    <option value="{{ $bloodType->id }}"
+                                                        {{ old('blood_type', $bloodUnit->blood_type) == $bloodType->id ? 'selected' : '' }}>
+                                                        {{ $bloodType->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('blood_type')
@@ -94,8 +103,9 @@
                                         <div class="form-group">
                                             <label for="volume">Volume (ml) <span class="text-danger">*</span></label>
                                             <input type="number" name="volume" id="volume"
-                                                   class="form-control @error('volume') is-invalid @enderror"
-                                                   value="{{ old('volume', $bloodUnit->volume) }}" step="0.1" min="0.1" max="9999.9" required>
+                                                class="form-control @error('volume') is-invalid @enderror"
+                                                value="{{ old('volume', $bloodUnit->volume) }}" step="0.1"
+                                                min="0.1" max="9999.9" required>
                                             @error('volume')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -108,10 +118,12 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="collection_date">Collection Date <span class="text-danger">*</span></label>
+                                            <label for="collection_date">Collection Date <span
+                                                    class="text-danger">*</span></label>
                                             <input type="date" name="collection_date" id="collection_date"
-                                                   class="form-control @error('collection_date') is-invalid @enderror"
-                                                   value="{{ old('collection_date', $bloodUnit->collection_date->format('Y-m-d')) }}" max="{{ date('Y-m-d') }}" required>
+                                                class="form-control @error('collection_date') is-invalid @enderror"
+                                                value="{{ old('collection_date', $bloodUnit->collection_date->format('Y-m-d')) }}"
+                                                max="{{ date('Y-m-d') }}" required>
                                             @error('collection_date')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -123,8 +135,9 @@
                                         <div class="form-group">
                                             <label for="expiry_date">Expiry Date <span class="text-danger">*</span></label>
                                             <input type="date" name="expiry_date" id="expiry_date"
-                                                   class="form-control @error('expiry_date') is-invalid @enderror"
-                                                   value="{{ old('expiry_date', $bloodUnit->expiry_date->format('Y-m-d')) }}" required>
+                                                class="form-control @error('expiry_date') is-invalid @enderror"
+                                                value="{{ old('expiry_date', $bloodUnit->expiry_date->format('Y-m-d')) }}"
+                                                required>
                                             @error('expiry_date')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -139,9 +152,9 @@
                                         <div class="form-group">
                                             <label for="storage_location">Storage Location</label>
                                             <input type="text" name="storage_location" id="storage_location"
-                                                   class="form-control @error('storage_location') is-invalid @enderror"
-                                                   value="{{ old('storage_location', $bloodUnit->storage_location) }}"
-                                                   placeholder="e.g., Refrigerator A, Shelf 2">
+                                                class="form-control @error('storage_location') is-invalid @enderror"
+                                                value="{{ old('storage_location', $bloodUnit->storage_location) }}"
+                                                placeholder="e.g., Refrigerator A, Shelf 2">
                                             @error('storage_location')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -153,9 +166,9 @@
                                         <div class="form-group">
                                             <label for="temperature">Storage Temperature (°C)</label>
                                             <input type="number" name="temperature" id="temperature"
-                                                   class="form-control @error('temperature') is-invalid @enderror"
-                                                   value="{{ old('temperature', $bloodUnit->temperature) }}"
-                                                   step="0.1" min="-50" max="50">
+                                                class="form-control @error('temperature') is-invalid @enderror"
+                                                value="{{ old('temperature', $bloodUnit->temperature) }}" step="0.1"
+                                                min="-50" max="50">
                                             @error('temperature')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -167,9 +180,9 @@
                                         <div class="form-group">
                                             <label for="hemoglobin_level">Hemoglobin Level (g/dL)</label>
                                             <input type="number" name="hemoglobin_level" id="hemoglobin_level"
-                                                   class="form-control @error('hemoglobin_level') is-invalid @enderror"
-                                                   value="{{ old('hemoglobin_level', $bloodUnit->hemoglobin_level) }}"
-                                                   step="0.1" min="0" max="20">
+                                                class="form-control @error('hemoglobin_level') is-invalid @enderror"
+                                                value="{{ old('hemoglobin_level', $bloodUnit->hemoglobin_level) }}"
+                                                step="0.1" min="0" max="20">
                                             @error('hemoglobin_level')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -183,9 +196,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="notes">Notes</label>
-                                            <textarea name="notes" id="notes" rows="3"
-                                                      class="form-control @error('notes') is-invalid @enderror"
-                                                      placeholder="Additional notes about this blood unit...">{{ old('notes', $bloodUnit->notes) }}</textarea>
+                                            <textarea name="notes" id="notes" rows="3" class="form-control @error('notes') is-invalid @enderror"
+                                                placeholder="Additional notes about this blood unit...">{{ old('notes', $bloodUnit->notes) }}</textarea>
                                             @error('notes')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -211,3 +223,45 @@
         </div>
     </section>
 @endsection
+
+    @section('custom-js')
+    <script>
+        $(document).ready(function() {
+            $('#donor_id').on('change', function() {
+                const donorId = $(this).val();
+                const bloodGroupSelect = $('#blood_group');
+
+                if (donorId) {
+                    $.ajax({
+                        url: '{{ route('backend.admin.blood-units.get-donor-blood-group', ':id') }}'
+                            .replace(':id', donorId),
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.blood_group) {
+                                bloodGroupSelect.val(response.blood_group).trigger('change');
+                                bloodGroupSelect.prop('readonly', true).css({
+                                    'background-color': '#e9ecef',
+                                    'cursor': 'not-allowed',
+                                    'pointer-events': 'none'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('Error fetching donor blood group:', xhr);
+                        }
+                    });
+                } else {
+                    bloodGroupSelect.val('');
+                    bloodGroupSelect.prop('readonly', false).css({
+                        'background-color': '',
+                        'cursor': '',
+                        'pointer-events': ''
+                    });
+                }
+            });
+        });
+    </script>
+    @endsection

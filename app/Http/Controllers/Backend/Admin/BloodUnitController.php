@@ -161,4 +161,14 @@ class BloodUnitController extends Controller
             'expiring_soon' => $expiringSoon,
         ]);
     }
+
+    /**
+     * Get donor blood group for auto-fill.
+     */
+    public function getDonorBloodGroup(Donor $donor)
+    {
+        return response()->json([
+            'blood_group' => $donor->blood_group,
+        ]);
+    }
 }

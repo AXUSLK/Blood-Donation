@@ -12,8 +12,13 @@ class BloodUnitUpdateService
     {
         $validated = $this->validate($bloodUnit, $requestData);
 
+        // Get blood group from donor if donor exists in DB
+        $bloodUnit->load('donor');
+        $donor = $bloodUnit->donor;
+        $bloodGroup = $donor && $donor->blood_group ? $donor->blood_group : $validated['blood_group'];
+
         $updateData = [
-            'blood_group' => $validated['blood_group'],
+            'blood_group' => $bloodGroup,
             'blood_type' => $validated['blood_type'],
             'collection_date' => $validated['collection_date'],
             'expiry_date' => $this->calculateExpiryDate($validated['collection_date'], $validated['blood_type']),

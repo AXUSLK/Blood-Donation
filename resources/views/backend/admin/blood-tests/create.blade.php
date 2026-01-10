@@ -287,3 +287,45 @@
         </div>
     </section>
 @endsection
+
+    @section('custom-js')
+    <script>
+        $(document).ready(function() {
+            $('#blood_unit_id').on('change', function() {
+                const bloodUnitId = $(this).val();
+                const bloodGroupSelect = $('#blood_group');
+
+                if (bloodUnitId) {
+                    $.ajax({
+                        url: '{{ route('backend.admin.blood-tests.get-blood-unit-blood-group', ':id') }}'
+                            .replace(':id', bloodUnitId),
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.blood_group) {
+                                bloodGroupSelect.val(response.blood_group).trigger('change');
+                                bloodGroupSelect.prop('readonly', true).css({
+                                    'background-color': '#e9ecef',
+                                    'cursor': 'not-allowed',
+                                    'pointer-events': 'none'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('Error fetching blood unit blood group:', xhr);
+                        }
+                    });
+                } else {
+                    bloodGroupSelect.val('');
+                    bloodGroupSelect.prop('readonly', false).css({
+                        'background-color': '',
+                        'cursor': '',
+                        'pointer-events': ''
+                    });
+                }
+            });
+        });
+    </script>
+    @endsection

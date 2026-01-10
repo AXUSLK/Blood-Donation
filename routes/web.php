@@ -51,6 +51,7 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::post('blood-inventory/{bloodInventory}/toggle-status', [BackendBloodInventoryController::class, 'toggleStatus'])->name('blood-inventory.toggle-status');
             Route::resource('blood-units', BackendBloodUnitController::class);
             Route::post('blood-units/{bloodUnit}/mark-used', [BackendBloodUnitController::class, 'markAsUsed'])->name('blood-units.mark-used');
+            Route::get('blood-units/get-donor-blood-group/{donor}', [BackendBloodUnitController::class, 'getDonorBloodGroup'])->name('blood-units.get-donor-blood-group');
 
             Route::resource('blood-collection-camps', BackendBloodCollectionCampController::class);
             Route::post('blood-collection-camps/{bloodCollectionCamp}/update-status', [BackendBloodCollectionCampController::class, 'updateStatus'])->name('blood-collection-camps.update-status');
@@ -58,6 +59,7 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::resource('blood-tests', BackendBloodTestController::class);
             Route::post('blood-tests/{bloodTest}/quarantine', [BackendBloodTestController::class, 'quarantine'])->name('blood-tests.quarantine');
             Route::post('blood-tests/{bloodTest}/approve', [BackendBloodTestController::class, 'approve'])->name('blood-tests.approve');
+            Route::get('blood-tests/get-blood-unit-blood-group/{bloodUnit}', [BackendBloodTestController::class, 'getBloodUnitBloodGroup'])->name('blood-tests.get-blood-unit-blood-group');
 
             Route::resource('blood-transfers', BackendBloodTransferController::class);
             Route::post('blood-transfers/{bloodTransfer}/approve', [BackendBloodTransferController::class, 'approve'])->name('blood-transfers.approve');

@@ -12,6 +12,11 @@ class BloodTestUpdateService
     {
         $validated = $this->validate($test, $requestData);
 
+        // Get blood group from blood unit if it exists in DB
+        $test->load('bloodUnit.donor');
+        $bloodUnit = $test->bloodUnit;
+        $bloodGroup = $bloodUnit ? ($bloodUnit->blood_group ?? $bloodUnit->donor->blood_group ?? $validated['blood_group']) : $validated['blood_group'];
+
         $updateData = [
             'technician_id' => $validated['technician_id'],
             'test_date' => $validated['test_date'],
@@ -20,7 +25,7 @@ class BloodTestUpdateService
             'hepatitis_c_result' => $validated['hepatitis_c_result'],
             'syphilis_result' => $validated['syphilis_result'],
             'malaria_result' => $validated['malaria_result'],
-            'blood_group' => $validated['blood_group'],
+            'blood_group' => $bloodGroup,
             'overall_status' => $this->determineOverallStatus($validated),
             'test_notes' => $validated['test_notes'],
             'lab_reference' => $validated['lab_reference'],

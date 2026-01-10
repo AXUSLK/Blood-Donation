@@ -12,6 +12,10 @@ class BloodTestStoreService
     {
         $validated = $this->validate($requestData);
 
+        // Get blood group from blood unit if it exists in DB
+        $bloodUnit = BloodUnit::with('donor')->find($validated['blood_unit_id']);
+        $bloodGroup = $bloodUnit ? ($bloodUnit->blood_group ?? $bloodUnit->donor->blood_group ?? $validated['blood_group']) : $validated['blood_group'];
+
         $test = BloodTest::create([
             'test_id' => $this->generateTestId(),
             'blood_unit_id' => $validated['blood_unit_id'],
@@ -22,7 +26,7 @@ class BloodTestStoreService
             'hepatitis_c_result' => $validated['hepatitis_c_result'],
             'syphilis_result' => $validated['syphilis_result'],
             'malaria_result' => $validated['malaria_result'],
-            'blood_group' => $validated['blood_group'],
+            'blood_group' => $bloodGroup,
             'overall_status' => $this->determineOverallStatus($validated),
             'test_notes' => $validated['test_notes'],
             'lab_reference' => $validated['lab_reference'],

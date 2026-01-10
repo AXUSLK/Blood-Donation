@@ -183,4 +183,15 @@ class BloodTestController extends Controller
             'quarantined_tests' => $quarantinedTests,
         ]);
     }
+
+    /**
+     * Get blood unit blood group for auto-fill.
+     */
+    public function getBloodUnitBloodGroup(BloodUnit $bloodUnit)
+    {
+        $bloodUnit->load('donor');
+        return response()->json([
+            'blood_group' => $bloodUnit->blood_group ?? $bloodUnit->donor->blood_group ?? null,
+        ]);
+    }
 }

@@ -13,10 +13,14 @@ class BloodUnitStoreService
     {
         $validated = $this->validate($requestData);
 
+        // Get blood group from donor if donor exists in DB
+        $donor = Donor::find($validated['donor_id']);
+        $bloodGroup = $donor && $donor->blood_group ? $donor->blood_group : $validated['blood_group'];
+
         $bloodUnit = BloodUnit::create([
             'unit_id' => $this->generateUnitId(),
             'donor_id' => $validated['donor_id'],
-            'blood_group' => $validated['blood_group'],
+            'blood_group' => $bloodGroup,
             'blood_type' => $validated['blood_type'],
             'collection_date' => $validated['collection_date'],
             'expiry_date' => $this->calculateExpiryDate($validated['collection_date'], $validated['blood_type']),

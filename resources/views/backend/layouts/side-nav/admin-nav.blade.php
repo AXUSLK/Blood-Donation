@@ -181,6 +181,34 @@
                     </ul>
                 </li>
 
+                {{-- Blood Transfers --}}
+                <li class="nav-item {{ request()->routeIs('backend.admin.blood-transfers.*') ? 'menu-open' : '' }}">
+                    <a href="#"
+                        class="nav-link {{ request()->routeIs('backend.admin.blood-transfers.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-exchange-alt"></i>
+                        <p>
+                            Blood Transfers
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-transfers.create') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-transfers.create') ? 'active' : '' }}">
+                                <i class="far fa-plus-square nav-icon"></i>
+                                <p>Create Transfer</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('backend.admin.blood-transfers.index') }}"
+                                class="nav-link {{ request()->routeIs('backend.admin.blood-transfers.index') ? 'active' : '' }}">
+                                <i class="far fa-list-alt nav-icon"></i>
+                                <p>Manage Transfers</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- Blood Units --}}
                 <li class="nav-item {{ request()->routeIs('backend.admin.blood-units.*') ? 'menu-open' : '' }}">
                     <a href="#"

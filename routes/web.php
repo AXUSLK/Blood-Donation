@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\Admin\BloodInventoryController as BackendBloodI
 use App\Http\Controllers\Backend\Admin\BloodUnitController as BackendBloodUnitController;
 use App\Http\Controllers\Backend\Admin\BloodCollectionCampController as BackendBloodCollectionCampController;
 use App\Http\Controllers\Backend\Admin\BloodTestController as BackendBloodTestController;
+use App\Http\Controllers\Backend\Admin\BloodTransferController as BackendBloodTransferController;
 use App\Http\Controllers\Backend\Admin\DashboardController as BackendAdminDashboardController;
 use App\Http\Controllers\Backend\Admin\AICompatibilityController as BackendAICompatibilityController;
 use App\Http\Controllers\Backend\Admin\AIEligibilityController as BackendAIEligibilityController;
@@ -57,6 +58,12 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::resource('blood-tests', BackendBloodTestController::class);
             Route::post('blood-tests/{bloodTest}/quarantine', [BackendBloodTestController::class, 'quarantine'])->name('blood-tests.quarantine');
             Route::post('blood-tests/{bloodTest}/approve', [BackendBloodTestController::class, 'approve'])->name('blood-tests.approve');
+
+            Route::resource('blood-transfers', BackendBloodTransferController::class);
+            Route::post('blood-transfers/{bloodTransfer}/approve', [BackendBloodTransferController::class, 'approve'])->name('blood-transfers.approve');
+            Route::post('blood-transfers/{bloodTransfer}/reject', [BackendBloodTransferController::class, 'reject'])->name('blood-transfers.reject');
+            Route::post('blood-transfers/{bloodTransfer}/cancel', [BackendBloodTransferController::class, 'cancel'])->name('blood-transfers.cancel');
+            Route::get('blood-transfers/stock/available', [BackendBloodTransferController::class, 'getAvailableStock'])->name('blood-transfers.available-stock');
 
             Route::resource('users', UserController::class);
             Route::resource('roles', RoleController::class);

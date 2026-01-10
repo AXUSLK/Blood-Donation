@@ -94,6 +94,6 @@ class UserSeeder extends Seeder
         $user3->assignRole([3]);
         $user4->assignRole([4]);
         $user5->assignRole([2]);
-        $user6->assignRole([4]);
+        $user6->assignRole([5]);
     }
 }

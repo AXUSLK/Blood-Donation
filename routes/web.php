@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\Admin\BloodTransferController as BackendBloodTr
 use App\Http\Controllers\Backend\Admin\DashboardController as BackendAdminDashboardController;
 use App\Http\Controllers\Backend\Admin\AICompatibilityController as BackendAICompatibilityController;
 use App\Http\Controllers\Backend\Admin\AIEligibilityController as BackendAIEligibilityController;
+use App\Http\Controllers\Backend\Donor\HistoryController as DonorHistoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,7 +29,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('admin')->name('backend.')->group(function () {
-    Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::group(['middleware' => ['auth']], function () {
         // Admin
         Route::name('admin.')->group(function () {
             Route::get('/dashboard', [BackendDashboardController::class, 'adminDashboard'])->name('dashboard');
@@ -71,10 +72,14 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::resource('roles', RoleController::class);
             Route::resource('permissions', PermissionController::class);
         });
-        // Donor
-        Route::name('donor.')->group(function () {
-            Route::get('/dashboard2', [BackendDashboardController::class, 'donorDashboard'])->name('dashboard');
-        });
+    });
+});
+
+// Donor Routes - Outside admin prefix
+Route::prefix('donor')->name('backend.donor.')->group(function () {
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('/dashboard', [BackendDashboardController::class, 'donorDashboard'])->name('dashboard');
+        Route::get('/history', [DonorHistoryController::class, 'index'])->name('history');
     });
 });
 

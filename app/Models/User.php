@@ -102,4 +102,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Lov::class, 'id', 'blood_group');
     }
+
+    public function donor()
+    {
+        return $this->hasOne(Donor::class, 'email', 'email');
+    }
 }

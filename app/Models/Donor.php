@@ -117,4 +117,9 @@ class Donor extends Model
     {
         return $this->hasOne(DonationHistory::class)->latest();
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
 }

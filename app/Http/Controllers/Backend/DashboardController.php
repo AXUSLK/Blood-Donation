@@ -10,6 +10,7 @@ use App\Models\Donor;
 use App\Models\Recipient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -75,7 +76,49 @@ class DashboardController extends Controller
      */
     public function donorDashboard()
     {
-        // xdebug_break();
-        return view('backend.dashboard.donor');
+        $user = Auth::user();
+        $donor = $user->donor;
+dd( $user);
+        if (!$donor) {
+            Auth::logout();
+            return redirect()->route('login')
+                ->with('error', 'Donor profile not found. Please contact administrator.');
+        }
+
+        $today = Carbon::today();
+        $thisYear = Carbon::now()->startOfYear();
+
+        // Get donation statistics for this donor
+        $totalDonations = $donor->donationHistories()->count();
+        $successfulDonations = $donor->donationHistories()->successful()->count();
+        $thisYearDonations = $donor->donationHistories()
+            ->whereYear('donation_date', $today->year)
+            ->count();
+
+        $lastDonation = $donor->latestDonation;
+        $nextEligibleDate = null;
+        if ($lastDonation && $lastDonation->donation_date) {
+            $nextEligibleDate = $lastDonation->donation_date->copy()->addDays(56); // 8 weeks minimum gap
+        }
+
+        $stats = [
+            'total_donations' => $totalDonations,
+            'successful_donations' => $successfulDonations,
+            'this_year_donations' => $thisYearDonations,
+            'is_eligible' => $donor->is_eligible,
+            'eligibility_reason' => $donor->eligibility_reason,
+            'last_donation_date' => $lastDonation ? $lastDonation->donation_date : null,
+            'next_eligible_date' => $nextEligibleDate,
+            'blood_group' => $donor->userBloodGroup?->value ?? 'N/A',
+        ];
+
+        // Recent donations (last 5)
+        $recentDonations = $donor->donationHistories()
+            ->with(['donationType', 'collectionLocation'])
+            ->orderBy('donation_date', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('backend.dashboard.donor', compact('stats', 'donor', 'recentDonations'));
     }
 }

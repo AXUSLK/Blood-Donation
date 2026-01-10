@@ -24,7 +24,13 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        @include('backend.layouts.side-nav.admin-nav')
+        @auth
+            @if(Auth::user()->hasRole('Donor'))
+                @include('backend.layouts.side-nav.donor-nav')
+            @else
+                @include('backend.layouts.side-nav.admin-nav')
+            @endif
+        @endauth
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">

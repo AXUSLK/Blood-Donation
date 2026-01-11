@@ -5,7 +5,7 @@
     </div>
     <!-- Default to the left -->
     <strong>Copyright &copy; 2014-2021
-        <a href="/">Blood Bank LTE</a>.
+        <a href="/">Vital Blood</a>.
     </strong> All rights
     reserved.
 </footer>

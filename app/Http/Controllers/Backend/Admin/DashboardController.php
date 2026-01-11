@@ -288,7 +288,7 @@ class DashboardController extends Controller
 
         if ($format === 'excel') {
             return $this->generateCsv($donors, $filename, [
-                'Donor ID', 'First Name', 'Last Name', 'Email', 'Phone', 
+                'Donor ID', 'First Name', 'Last Name', 'Email', 'Phone',
                 'Blood Group', 'Gender', 'Date of Birth', 'Age', 'Total Donations', 'Status'
             ], function($donor) {
                 return [
@@ -481,22 +481,22 @@ class DashboardController extends Controller
     private function generateCsv($data, $filename, $headers, $rowCallback)
     {
         $output = fopen('php://temp', 'r+');
-        
-        // Add BOM for UTF-8 (helps Excel display special characters correctly)
+
+        // Add BOM for UTF-8
         fwrite($output, "\xEF\xBB\xBF");
-        
+
         // Write headers
         fputcsv($output, $headers);
-        
+
         // Write data rows
         foreach ($data as $item) {
             fputcsv($output, $rowCallback($item));
         }
-        
+
         rewind($output);
         $csv = stream_get_contents($output);
         fclose($output);
-        
+
         return response($csv)
             ->header('Content-Type', 'text/csv; charset=UTF-8')
             ->header('Content-Disposition', 'attachment; filename="' . $filename . '.csv"');
@@ -511,9 +511,7 @@ class DashboardController extends Controller
             'data' => $data,
             'rowCallback' => $rowCallback
         ])->render();
-        
-        // Return HTML that can be printed to PDF by the browser
-        // Users can use browser's "Print to PDF" feature
+
         return response($html)
             ->header('Content-Type', 'text/html')
             ->header('Content-Disposition', 'inline; filename="' . $filename . '.html"');

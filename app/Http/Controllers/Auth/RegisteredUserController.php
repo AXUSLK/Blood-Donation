@@ -82,6 +82,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('backend.donor.dashboard', absolute: false))
-            ->with('success', 'Registration successful! Welcome to Blood Bank LTE.');
+            ->with('success', 'Registration successful! Welcome to Vital Blood.');
     }
 }

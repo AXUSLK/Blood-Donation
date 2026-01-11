@@ -89,8 +89,8 @@ class DonorService
             'gender' => $userData['gender'],
             'dob' => $userData['dob'],
             'age' => $age,
-            'weight' => null, // Can be updated later
-            'height' => null, // Can be updated later
+            'weight' => null,
+            'height' => null,
             'medical_history' => null,
             'allergies' => null,
             'medications' => null,
@@ -100,7 +100,7 @@ class DonorService
             'is_eligible' => $eligibility['is_eligible'],
             'eligibility_reason' => $eligibility['eligibility_reason'],
             'status' => true,
-            'created_by' => null, // Public registration
+            'created_by' => null,
         ]);
     }
 }

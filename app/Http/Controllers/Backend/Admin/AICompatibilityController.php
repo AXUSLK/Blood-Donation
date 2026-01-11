@@ -114,7 +114,7 @@ class AICompatibilityController extends Controller
         } else {
             $recommendations[] = "⚠️ Do NOT proceed with this blood type";
             $recommendations[] = "🔍 Find compatible blood type from inventory";
-            $recommendations[] = "📞 Contact blood bank for alternative units";
+            $recommendations[] = "📞 Contact Vital Blood for alternative units";
         }
 
         // AI-powered additional recommendations

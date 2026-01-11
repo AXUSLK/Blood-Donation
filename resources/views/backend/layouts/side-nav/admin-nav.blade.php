@@ -1,8 +1,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="{{ route('backend.admin.dashboard') }}" class="brand-link">
-        <img src="/images/logo.png" alt="Blood Donation LTE Logo" class="brand-image img-circle elevation-3"
+        <img src="/images/logo.png" alt="Vital Blood Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8">
-        <span class="brand-text font-weight-light">Blood Donation LTE</span>
+        <span class="brand-text font-weight-light">Vital Blood</span>
     </a>
 
     <div class="sidebar">

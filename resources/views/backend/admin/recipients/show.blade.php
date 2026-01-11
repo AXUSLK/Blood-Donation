@@ -1,7 +1,6 @@
 @extends('backend.layouts.master')
 
 @section('content')
-<div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -88,15 +87,11 @@
                                         </tr>
                                         <tr>
                                             <th>City:</th>
-                                            <td>{{ $contactInfo['city'] ?? '-' }}</td>
+                                            <td>{{ $recipient->city ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>District:</th>
                                             <td>{{ $recipient->district ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Full Address:</th>
-                                            <td>{{ $contactInfo['address'] ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Request Status:</th>
@@ -243,5 +238,4 @@
             </div>
         </div>
     </section>
-</div>
 @endsection

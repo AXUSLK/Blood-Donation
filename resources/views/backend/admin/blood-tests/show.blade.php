@@ -56,8 +56,8 @@
                                         <tr>
                                             <th>Blood Unit:</th>
                                             <td>
-                                                <a href="{{ route('backend.admin.blood-units.show', $bloodTest->bloodUnit?->id) }}" class="text-primary">
-                                                    {{ $bloodTest->bloodUnit?->unit_id }}
+                                                <a href="{{ route('backend.admin.blood-units.show', $bloodTest->bloodnit->id) }}" class="text-primary">
+                                                    {{ $bloodTest->bloodnit->unit_id }}
                                                 </a>
                                             </td>
                                         </tr>

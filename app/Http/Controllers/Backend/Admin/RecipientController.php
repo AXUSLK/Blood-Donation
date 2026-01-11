@@ -90,24 +90,7 @@ class RecipientController extends Controller
     public function show(Recipient $recipient)
     {
         $recipient->load(['userBloodGroup', 'userGender', 'userTitle', 'createBy', 'updateBy']);
-
-        // Calculate age from date of birth
-        $age = $recipient->dob ? now()->diffInYears($recipient->dob) : null;
-        $recipient->calculated_age = $age;
-
-        // Get contact information
-        $contactInfo = [
-            'phone' => $recipient->contact_number,
-            'email' => $recipient->email,
-            'address' => $recipient->address_line,
-            'city' => $recipient->city_name,
-        ];
-
-        // Get Hospital details
-        // $bloodRequests = $recipient->bloodRequests()->with('bloodGroup')->get();
-        $hospitalDetails = $recipient->getHospitalInfo();
-
-        return view('backend.admin.recipients.show', compact('recipient', 'contactInfo', 'hospitalDetails', 'bloodRequests'));
+        return view('backend.admin.recipients.show', compact('recipient'));
     }
 
     /**
